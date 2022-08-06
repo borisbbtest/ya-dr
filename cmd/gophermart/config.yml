@@ -1,0 +1,6 @@
+port: 8080
+ServerHost: localhost
+BASE_URL:   "http://localhost:8080"
+SERVER_ADDRESS:  "localhost:8080"
+FILE_STORAGE_PATH: "/tmp/test"
+DATABASE_DSN: "postgres://postgres:boris123@localhost:5432/praktikum?sslmode=disable"
