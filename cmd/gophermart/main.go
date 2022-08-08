@@ -3,7 +3,8 @@ package main
 import (
 	"os"
 
-	config "github.com/borisbbtest/ya-dr/internal/conf"
+	"github.com/borisbbtest/ya-dr/internal/app"
+	config "github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/sirupsen/logrus"
 )
 
@@ -17,16 +18,13 @@ func main() {
 	cfg, err := config.GetConfig()
 	if err != nil {
 		cfg = &config.ServiceShortURLConfig{
-			Port:          8080,
-			ServerHost:    "localhost",
-			BaseURL:       "http://localhost:8080",
-			ServerAddress: "localhost:8080",
-			FileStorePath: "",
+			DATABASE_URI:           "localhost",
+			RUN_ADDRESS:            "localhost:8080",
+			ACCRUAL_SYSTEM_ADDRESS: "",
 		}
 	}
-	print(cfg)
-	//	err = app.New(cfg).Start()
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
+	err = app.New(cfg).Start()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
