@@ -47,9 +47,9 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	// 500 — внутренняя ошибка сервера.
 	user, _ := hook.Storage.PutUser(m)
 	if user != "" {
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusConflict)
 	} else {
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 	}
 
 	log.Println("Post handler", user)
