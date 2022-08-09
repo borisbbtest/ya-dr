@@ -71,6 +71,11 @@ func (p *Plugin) NewDBConn(key string, params []string, dsnString string, handle
 		handler = p.pingHandler // postgres.ping[[connString]]
 	case keyPostgresCreateDdLoyaltySystem:
 		handler = p.CreateTableLoyaltySystemHandler
+	case keyPostgresInsertUser:
+		handler = p.insertUserHandler
+	case keyPostgresSelectUser:
+		handler = p.selectUserHandler
+
 	default:
 		return nil, errorUnsupportedQuery
 	}

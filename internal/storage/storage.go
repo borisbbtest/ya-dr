@@ -10,7 +10,9 @@ type StoreDBLocal struct {
 	ListUser map[string][]string
 }
 type Storage interface {
+	PutUser(v model.DataUsers) (string, error)
+	GetUser(k string) (model.DataUsers, error)
 	Close()
 }
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "system_loyalty")

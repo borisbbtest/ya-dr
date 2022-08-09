@@ -10,9 +10,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "system_loyalty")
 
-type ServiceShortURLConfig struct {
+type MainConfig struct {
 	ACCRUAL_SYSTEM_ADDRESS string `yaml:"ACCRUAL_SYSTEM_ADDRESS"`
 	DATABASE_URI           string `yaml:"DATABASE_URI"`
 	RUN_ADDRESS            string `yaml:"RUN_ADDRESS"`
@@ -23,10 +23,10 @@ type ConfigFromENV struct {
 	RUN_ADDRESS            string `env:"RUN_ADDRESS"`
 }
 type ServerConfig interface {
-	GetConfig() (config *ServiceShortURLConfig, err error)
+	GetConfig() (config *MainConfig, err error)
 }
 
-func GetConfig() (config *ServiceShortURLConfig, err error) {
+func GetConfig() (config *MainConfig, err error) {
 
 	var ACCRUAL_SYSTEM_ADDRESS, DATABASE_URI, RUN_ADDRESS, configFileName string
 	flag.StringVarP(&configFileName, "config", "c", "./config.yml", "path to the configuration file")
@@ -43,7 +43,7 @@ func GetConfig() (config *ServiceShortURLConfig, err error) {
 
 	}
 	// Default values
-	config = &ServiceShortURLConfig{
+	config = &MainConfig{
 		ACCRUAL_SYSTEM_ADDRESS: "localhost:8080",
 		RUN_ADDRESS:            "localhost:8080",
 		DATABASE_URI:           "",

@@ -11,35 +11,18 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "service_system_loyalty")
 
-type WrapperHandler struct {
-	ServerConf *config.ServiceShortURLConfig
+type WrapperMiddlewareHandler struct {
+	ServerConf *config.MainConfig
 	Storage    storage.Storage
 	UserID     string
 }
 
-func AddCookie(w http.ResponseWriter, r *http.Request, name, value string, ttl time.Duration) (res string, err error) {
-	ck, err := r.Cookie(name)
-	if err == nil {
-		res = ck.Value
-		return
-	}
-	log.Info("Cant find cookie : set cooke")
-	expire := time.Now().Add(ttl)
-	cookie := http.Cookie{
-		Name:    name,
-		Value:   value,
-		Expires: expire,
-	}
-	http.SetCookie(w, &cookie)
-	return value, err
-}
-
-func (hook *WrapperHandler) MidSetCookie(next http.Handler) http.Handler {
+func MidSetCookie(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tmp, _ := tools.GetID()
-		hook.UserID, _ = AddCookie(w, r, "ShortURL", fmt.Sprintf("%x", tmp), 30*time.Minute)
+		tools.AddCookie(w, r, "SystemLoyalty", fmt.Sprintf("%x", tmp), 30*time.Minute)
 		next.ServeHTTP(w, r)
 	})
 }

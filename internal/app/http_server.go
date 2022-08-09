@@ -16,13 +16,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "system_loyalty")
 
 type serviceShortURL struct {
 	wrapp handlers.WrapperHandler
 }
 
-func New(cfg *config.ServiceShortURLConfig) *serviceShortURL {
+func New(cfg *config.MainConfig) *serviceShortURL {
 	return &serviceShortURL{
 		wrapp: handlers.WrapperHandler{
 			ServerConf: cfg,
@@ -47,12 +47,12 @@ func (hook *serviceShortURL) Start() (err error) {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(midd.GzipHandle)
-	//r.Use(midd.MidSetCookie)
+	r.Use(midd.MidSetCookie)
 	//r.Use(middleware.Compress(5, "gzip"))
 	r.Use(middleware.Recoverer)
 
-	//r.Post("/api/user/register", hook.wrapp.PostJSONRegisterHandler)
-	//r.Post("/api/user/login", hook.wrapp.PostJSONLoginHandler)
+	r.Post("/api/user/register", hook.wrapp.PostJSONRegisterHandler)
+	r.Post("/api/user/login", hook.wrapp.PostJSONLoginHandler)
 
 	workDir, _ := os.Getwd()
 	filesDir := http.Dir(filepath.Join(workDir, "web"))

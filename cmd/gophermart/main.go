@@ -17,7 +17,7 @@ func main() {
 
 	cfg, err := config.GetConfig()
 	if err != nil {
-		cfg = &config.ServiceShortURLConfig{
+		cfg = &config.MainConfig{
 			DATABASE_URI:           "localhost",
 			RUN_ADDRESS:            "localhost:8080",
 			ACCRUAL_SYSTEM_ADDRESS: "",

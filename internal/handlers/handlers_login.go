@@ -8,10 +8,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "system_loyalty")
 
 type WrapperHandler struct {
-	ServerConf *config.ServiceShortURLConfig
+	ServerConf *config.MainConfig
 	Storage    storage.Storage
 	UserID     string
 }

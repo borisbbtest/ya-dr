@@ -12,7 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.WithField("context", "service_short_url")
+var log = logrus.WithField("context", "system_loyalty")
 
 // postgresConn holds pointer to the Pool of Postgres Instance
 type postgresConn struct {

@@ -14,7 +14,6 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 					(
 						"Login" "text",
 						"Password" "text" NOT NULL,
-						"UserID" "text",
 						CONSTRAINT "Login" PRIMARY KEY ("Login")
 					)
 					TABLESPACE pg_default;
