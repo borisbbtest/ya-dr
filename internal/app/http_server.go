@@ -36,7 +36,7 @@ func (hook *serviceShortURL) Start() (err error) {
 	log.Println("Initializing HTTP server")
 	r := chi.NewRouter()
 
-	hook.wrapp.Storage, err = storage.NewPostgreSQLStorage(hook.wrapp.ServerConf.Database_uri)
+	hook.wrapp.Storage, err = storage.NewPostgreSQLStorage(hook.wrapp.ServerConf.DatabaseURI)
 	if err != nil {
 		log.Error(err)
 
@@ -59,7 +59,7 @@ func (hook *serviceShortURL) Start() (err error) {
 	hook.wrapp.FileServer(r, "/form", filesDir)
 
 	server := &http.Server{
-		Addr:         hook.wrapp.ServerConf.Run_address,
+		Addr:         hook.wrapp.ServerConf.RunAddress,
 		Handler:      r,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,

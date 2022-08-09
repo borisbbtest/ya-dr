@@ -18,9 +18,9 @@ func main() {
 	cfg, err := config.GetConfig()
 	if err != nil {
 		cfg = &config.MainConfig{
-			Database_uri:           "localhost",
-			Run_address:            "localhost:8080",
-			Accrual_system_address: "",
+			DatabaseURI:          "localhost",
+			RunAddress:           "localhost:8080",
+			AccrualSystemAddress: "",
 		}
 	}
 	err = app.New(cfg).Start()
