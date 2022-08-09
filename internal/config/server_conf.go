@@ -13,14 +13,14 @@ import (
 var log = logrus.WithField("context", "system_loyalty")
 
 type MainConfig struct {
-	ACCRUAL_SYSTEM_ADDRESS string `yaml:"ACCRUAL_SYSTEM_ADDRESS"`
-	DATABASE_URI           string `yaml:"DATABASE_URI"`
-	RUN_ADDRESS            string `yaml:"RUN_ADDRESS"`
+	Accrual_system_address string `yaml:"ACCRUAL_SYSTEM_ADDRESS"`
+	Database_uri           string `yaml:"DATABASE_URI"`
+	Run_address            string `yaml:"RUN_ADDRESS"`
 }
 type ConfigFromENV struct {
-	ACCRUAL_SYSTEM_ADDRESS string `env:"ACCRUAL_SYSTEM_ADDRESS"`
-	DATABASE_URI           string `env:"DATABASE_URI"`
-	RUN_ADDRESS            string `env:"RUN_ADDRESS"`
+	Accrual_system_address string `env:"ACCRUAL_SYSTEM_ADDRESS"`
+	Database_uri           string `env:"DATABASE_URI"`
+	Run_address            string `env:"RUN_ADDRESS"`
 }
 type ServerConfig interface {
 	GetConfig() (config *MainConfig, err error)
@@ -28,11 +28,11 @@ type ServerConfig interface {
 
 func GetConfig() (config *MainConfig, err error) {
 
-	var ACCRUAL_SYSTEM_ADDRESS, DATABASE_URI, RUN_ADDRESS, configFileName string
+	var accrual_system_address, database_uri, run_address, configFileName string
 	flag.StringVarP(&configFileName, "config", "c", "./config.yml", "path to the configuration file")
-	flag.StringVarP(&ACCRUAL_SYSTEM_ADDRESS, "accrual_system_adders", "r", "", "Accrual system address")
-	flag.StringVarP(&DATABASE_URI, "database_uri", "d", "", "Base URL")
-	flag.StringVarP(&RUN_ADDRESS, "run_server", "a", "", "Run server")
+	flag.StringVarP(&accrual_system_address, "accrual_system_adders", "r", "", "Accrual system address")
+	flag.StringVarP(&database_uri, "database_uri", "d", "", "Base URL")
+	flag.StringVarP(&run_address, "run_server", "a", "", "Run server")
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 	flag.Parse()
 
@@ -44,9 +44,9 @@ func GetConfig() (config *MainConfig, err error) {
 	}
 	// Default values
 	config = &MainConfig{
-		ACCRUAL_SYSTEM_ADDRESS: "localhost:8080",
-		RUN_ADDRESS:            "localhost:8080",
-		DATABASE_URI:           "",
+		Accrual_system_address: "localhost:8080",
+		Run_address:            "localhost:8080",
+		Database_uri:           "",
 	}
 
 	err = yaml.Unmarshal(configFile, &config)
@@ -59,28 +59,28 @@ func GetConfig() (config *MainConfig, err error) {
 	if err != nil {
 		log.Errorf("can't start the listening thread: %s", err)
 	} else {
-		if cfgenv.ACCRUAL_SYSTEM_ADDRESS != "" {
-			config.ACCRUAL_SYSTEM_ADDRESS = cfgenv.ACCRUAL_SYSTEM_ADDRESS
+		if cfgenv.Accrual_system_address != "" {
+			config.Accrual_system_address = cfgenv.Accrual_system_address
 		}
-		if cfgenv.DATABASE_URI != "" {
-			config.DATABASE_URI = cfgenv.DATABASE_URI
+		if cfgenv.Database_uri != "" {
+			config.Database_uri = cfgenv.Database_uri
 		}
-		if cfgenv.RUN_ADDRESS != "" {
-			config.RUN_ADDRESS = cfgenv.RUN_ADDRESS
+		if cfgenv.Run_address != "" {
+			config.Run_address = cfgenv.Run_address
 		}
 	}
 
-	if RUN_ADDRESS != "" {
-		config.RUN_ADDRESS = RUN_ADDRESS
+	if run_address != "" {
+		config.Run_address = run_address
 	}
-	if DATABASE_URI != "" {
-		config.DATABASE_URI = DATABASE_URI
+	if database_uri != "" {
+		config.Database_uri = database_uri
 	}
-	if ACCRUAL_SYSTEM_ADDRESS != "" {
-		config.ACCRUAL_SYSTEM_ADDRESS = ACCRUAL_SYSTEM_ADDRESS
+	if accrual_system_address != "" {
+		config.Accrual_system_address = accrual_system_address
 	}
 	//***postgres:5432/praktikum?sslmode=disable
-	log.Info(config.DATABASE_URI)
+	log.Info(config.Database_uri)
 	log.Info("Configuration loaded")
 	return
 }
