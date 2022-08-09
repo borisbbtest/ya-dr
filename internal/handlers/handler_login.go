@@ -10,6 +10,7 @@ import (
 	"github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/borisbbtest/ya-dr/internal/model"
 	"github.com/borisbbtest/ya-dr/internal/storage"
+	"github.com/borisbbtest/ya-dr/internal/tools"
 	"github.com/sirupsen/logrus"
 )
 
@@ -52,15 +53,18 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	// 200 — пользователь успешно зарегистрирован и аутентифицирован;
+	// 200 — пользователь успешно аутентифицирован;
 	// 400 — неверный формат запроса;
-	// 409 — логин уже занят;
+	// 401 — неверная пара логин/пароль;
 	// 500 — внутренняя ошибка сервера.
-	user, _ := hook.Storage.PutUser(m)
-	if user != "" {
+	user, err := hook.Storage.GetUser(m)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+	}
+	if tools.Equal(&user, &m) {
 		w.WriteHeader(http.StatusOK)
 	} else {
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusUnauthorized)
 	}
 
 	log.Println("Post handler")

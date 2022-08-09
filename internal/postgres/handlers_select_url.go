@@ -13,12 +13,12 @@ const (
 func (p *Plugin) selectUserHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	buff := model.DataUsers{}
-	query := `SELECT "Login", "Password", "UserID"  FROM  "Users"  WHERE  "Login"  = $1;`
+	query := `SELECT "Login", "Password"  FROM  "Users"  WHERE  "Login"  = $1;`
 
 	err := conn.postgresPool.QueryRow(context.Background(), query, params[0]).Scan(&buff.Login, &buff.Password)
 	if err != nil {
 		log.Error(err)
-		return postgresPingFailed, err
+		return nil, err
 	}
 
 	return buff, nil

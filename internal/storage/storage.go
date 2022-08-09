@@ -11,7 +11,7 @@ type StoreDBLocal struct {
 }
 type Storage interface {
 	PutUser(v model.DataUsers) (string, error)
-	GetUser(k string) (model.DataUsers, error)
+	GetUser(u model.DataUsers) (model.DataUsers, error)
 	Close()
 }
 

@@ -34,9 +34,9 @@ func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUsers) (string, error) {
 	return res.(string), err
 }
 
-func (hook *StoreDBinPostgreSQL) GetUser(k string) (model.DataUsers, error) {
+func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUsers) (model.DataUsers, error) {
 
-	buff := []interface{}{k}
+	buff := []interface{}{k.Login}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.user", []string{}, hook.connStr, buff)
 	if err != nil {
 		log.Error("pgsql.select.tb.user", err)
