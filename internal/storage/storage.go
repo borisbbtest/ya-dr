@@ -5,13 +5,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type StoreDBLocal struct {
-	DBLocal  map[string]model.DataUsers
-	ListUser map[string][]string
+type SessionHTTP struct {
+	DBSession map[string]model.DataUser
 }
 type Storage interface {
-	PutUser(v model.DataUsers) (string, error)
-	GetUser(u model.DataUsers) (model.DataUsers, error)
+	PutUser(v model.DataUser) (string, error)
+	GetUser(u model.DataUser) (model.DataUser, error)
 	Close()
 }
 

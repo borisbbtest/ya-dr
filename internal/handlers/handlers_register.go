@@ -3,11 +3,14 @@ package handlers
 import (
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/borisbbtest/ya-dr/internal/model"
+	"github.com/borisbbtest/ya-dr/internal/tools"
 )
 
 func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +36,7 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	log.Info("PostJSONHandler")
 	defer r.Body.Close()
 
-	var m model.DataUsers
+	var m model.DataUser
 	if err := json.Unmarshal(bytes, &m); err != nil {
 		log.Errorf("body error: %v", string(bytes))
 		log.Errorf("error decoding message: %v", err)
@@ -49,6 +52,11 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	if user != "" {
 		w.WriteHeader(http.StatusConflict)
 	} else {
+		tmp, _ := tools.GetID()
+		str := fmt.Sprintf("%x", tmp)
+		time, _ := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		m.SessionExpiredAt = time
+		hook.Session.DBSession[str] = m
 		w.WriteHeader(http.StatusOK)
 	}
 

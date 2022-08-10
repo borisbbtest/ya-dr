@@ -1,11 +1,8 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/borisbbtest/ya-dr/internal/storage"
 	"github.com/borisbbtest/ya-dr/internal/tools"
 	"github.com/sirupsen/logrus"
@@ -13,16 +10,17 @@ import (
 
 var log = logrus.WithField("context", "service_system_loyalty")
 
-type WrapperMiddlewareHandler struct {
-	ServerConf *config.MainConfig
-	Storage    storage.Storage
-	UserID     string
+type WrapperMiddleware struct {
+	Session *storage.SessionHTTP
 }
 
-func MidSetCookie(next http.Handler) http.Handler {
+func (hook *WrapperMiddleware) MiddleSetSessionCookie(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		tmp, _ := tools.GetID()
-		tools.AddCookie(w, r, "SystemLoyalty", fmt.Sprintf("%x", tmp), 30*time.Minute)
-		next.ServeHTTP(w, r)
+		if tools.IsUserAuthed(r, hook.Session) {
+			next.ServeHTTP(w, r)
+			return
+		}
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("Login failed"))
 	})
 }

@@ -3,28 +3,15 @@ package handlers
 import (
 	"compress/gzip"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 
-	"github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/borisbbtest/ya-dr/internal/model"
-	"github.com/borisbbtest/ya-dr/internal/storage"
 	"github.com/borisbbtest/ya-dr/internal/tools"
-	"github.com/sirupsen/logrus"
 )
 
-var log = logrus.WithField("context", "system_loyalty")
-
-type WrapperHandler struct {
-	ServerConf *config.MainConfig
-	Storage    storage.Storage
-	Session    *storage.SessionHTTP
-}
-
-func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.Request) {
+func (hook *WrapperHandler) GetJSONOrderHandler(w http.ResponseWriter, r *http.Request) {
 
 	var reader io.Reader
 
@@ -64,11 +51,6 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 		w.WriteHeader(http.StatusUnauthorized)
 	}
 	if tools.Equal(&user, &m) {
-		tmp, _ := tools.GetID()
-		str := fmt.Sprintf("%x", tmp)
-		time, _ := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
-		user.SessionExpiredAt = time
-		hook.Session.DBSession[str] = user
 		w.WriteHeader(http.StatusOK)
 	} else {
 		w.WriteHeader(http.StatusUnauthorized)

@@ -25,7 +25,7 @@ func (hook *StoreDBinPostgreSQL) Close() {
 	hook.pgp.Stop()
 }
 
-func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUsers) (string, error) {
+func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUser) (string, error) {
 	buff := []interface{}{v.Login, v.Password}
 	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.users", []string{}, hook.connStr, buff)
 	if err != nil {
@@ -34,14 +34,14 @@ func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUsers) (string, error) {
 	return res.(string), err
 }
 
-func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUsers) (model.DataUsers, error) {
+func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUser) (model.DataUser, error) {
 
 	buff := []interface{}{k.Login}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.user", []string{}, hook.connStr, buff)
 	if err != nil {
 		log.Error("pgsql.select.tb.user", err)
-		return model.DataUsers{}, err
+		return model.DataUser{}, err
 	}
 
-	return res.(model.DataUsers), nil
+	return res.(model.DataUser), nil
 }
