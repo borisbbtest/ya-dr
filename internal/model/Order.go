@@ -10,9 +10,9 @@ const (
 )
 
 type DataOrders struct {
-	Number      string    `json:"number"`
-	Status      string    `json:"status"`
-	Accrual     *int      `json:"accrual,omitempty"` //nullable
-	Person      string    `json:"-"`
-	Uploaded_at time.Time `json:"uploaded_at"`
+	Number     string    `json:"number"`
+	Status     string    `json:"status"`
+	Accrual    *int      `json:"accrual,omitempty"` //nullable
+	Person     string    `json:"-"`
+	UploadedAt time.Time `json:"uploaded_at"`
 }

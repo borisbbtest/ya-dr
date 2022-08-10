@@ -25,8 +25,7 @@ type serviceSystemLoyalty struct {
 }
 
 func New(cfg *config.MainConfig) *serviceSystemLoyalty {
-	var sessionHTTP *storage.SessionHTTP
-	sessionHTTP = &storage.SessionHTTP{DBSession: map[string]model.DataUser{}}
+	var sessionHTTP *storage.SessionHTTP = &storage.SessionHTTP{DBSession: map[string]model.DataUser{}}
 	return &serviceSystemLoyalty{
 		wrapp: handlers.WrapperHandler{
 			ServerConf: cfg,
