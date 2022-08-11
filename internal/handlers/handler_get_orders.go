@@ -10,8 +10,6 @@ import (
 
 func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
-
 	currentPerson, err := tools.GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -35,9 +33,10 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 
 	log.Info(arrOrders)
 	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
-		log.Info(err)
+		log.Info("Error ----- ", err)
 		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	log.Println("Post handler")
 }
