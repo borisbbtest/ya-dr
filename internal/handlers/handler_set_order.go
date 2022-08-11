@@ -85,6 +85,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 func calculateLoyaltySystem(orderNumber string, s *config.MainConfig) {
 	link := fmt.Sprintf("%s/api/orders/%s", s.AccrualSystemAddress, orderNumber)
 	log.Info("calculateLoyaltySystem", link)
+
 	req, err := http.NewRequest(http.MethodGet, link, nil)
 	if err != nil {
 		return
@@ -95,6 +96,7 @@ func calculateLoyaltySystem(orderNumber string, s *config.MainConfig) {
 	if err != nil {
 		log.Errorf("error get data: %v", err)
 	}
+	log.Info("Info req ", bytes.Status, bytes.Header)
 	var order *model.DataOrder
 
 	//	b, err := io.ReadAll(bytes.Body)
