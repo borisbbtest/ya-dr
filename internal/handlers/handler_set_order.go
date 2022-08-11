@@ -74,7 +74,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))
 
-	//	go hook.calculateLoyaltySystem(orderNumber)
+	go hook.calculateLoyaltySystem(orderNumber)
 
 	log.Print(res)
 	log.Println("Post handler")
@@ -98,7 +98,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 		return
 	}
 	defer bytes.Body.Close()
-	// if err := s.Orders().UpdateStatus(order); err != nil {
-	// 	return
-	// }
+	if _, err := hook.Storage.UpdateOrder(order); err != nil {
+		return
+	}
 }
