@@ -102,7 +102,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 			bytes.Body.Close()
 			continue
 		}
-		// ", bytes.Status, bytes.Header)
+		log.Info(" calculateLoyaltySystem again ---  ", bytes.Status, bytes.Header)
 		var order *model.DataOrder
 		//	b, err := io.ReadAll(bytes.Body)
 		//	log.Info("J_____", string(b))
