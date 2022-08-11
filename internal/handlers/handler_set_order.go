@@ -112,6 +112,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 			bytes.Body.Close()
 			continue
 		}
+		log.Info(order)
 		bytes.Body.Close()
 		if _, err := hook.Storage.UpdateOrder(order); err != nil {
 			log.Errorf("calculateLoyaltySystem  -  DB : %v", err)
