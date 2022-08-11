@@ -21,13 +21,13 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 
 	arrOrders, err := hook.Storage.GetOrders(currentPerson)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	// if len(arrOrders) == 0 {
-	// 	w.WriteHeader(http.StatusNoContent)
-	// 	return
-	// }
+	if len(arrOrders) == 0 {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
 
 	sort.Slice(arrOrders, func(i, j int) bool {
 		return arrOrders[i].UploadedAt.Before(arrOrders[j].UploadedAt)
