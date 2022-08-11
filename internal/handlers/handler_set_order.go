@@ -73,10 +73,10 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	go calculateLoyaltySystem(orderNumber, hook.ServerConf)
+
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))
-
-	go calculateLoyaltySystem(orderNumber, hook.ServerConf)
 
 	log.Print(res)
 	log.Println("Post handler")
