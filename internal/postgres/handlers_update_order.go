@@ -17,6 +17,7 @@ func (p *Plugin) updateOrderHandler(conn *postgresConn, key string, params []int
 			`
 
 	if _, err = conn.postgresPool.Exec(context.Background(), query); err != nil {
+		log.Error("updateOrderHandler ", err)
 		return "didn't update ", err
 	}
 

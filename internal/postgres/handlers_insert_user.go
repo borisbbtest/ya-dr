@@ -28,7 +28,7 @@ func (p *Plugin) insertUserHandler(conn *postgresConn, key string, params []inte
 	err = conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&users)
 
 	if err != nil {
-		log.Info("Custom  --  ", err)
+		log.Info("insertUserHandler  --  ", err)
 		return nil, err
 	}
 

@@ -27,7 +27,7 @@ func (p *Plugin) insertOrderHandler(conn *postgresConn, key string, params []int
 	err = conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&person)
 
 	if err != nil {
-		log.Info("Custom  --  ", err)
+		log.Info("insertOrderHandler  --  ", err)
 		return nil, err
 	}
 

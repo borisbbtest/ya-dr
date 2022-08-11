@@ -22,13 +22,13 @@ func (p *Plugin) selectOrdersHandler(conn *postgresConn, key string, params []in
 		m := model.DataOrder{}
 		err = rows.Scan(&m.Number, &m.Status, &m.Person, &m.Accrual, &m.UploadedAt)
 		if err != nil {
-			log.Info("error - c: ", err)
+			log.Info("selectOrdersHandler - c: ", err)
 			return nil, err
 		}
 		orders = append(orders, m)
 	}
 	if err != nil {
-		log.Info("Custom  --  ", err)
+		log.Info("selectOrdersHandler  --  ", err)
 		return nil, err
 	}
 
