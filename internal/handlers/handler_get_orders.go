@@ -33,5 +33,6 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		log.Info(err)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	log.Println("Post handler")
 }
