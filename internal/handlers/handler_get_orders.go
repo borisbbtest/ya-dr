@@ -22,7 +22,6 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		return
 	}
 	if len(arrOrders) == 0 {
-		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
