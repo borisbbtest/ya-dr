@@ -7,10 +7,9 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
-	"github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/borisbbtest/ya-dr/internal/model"
-	"github.com/borisbbtest/ya-dr/internal/storage"
 	"github.com/borisbbtest/ya-dr/internal/tools"
 )
 
@@ -73,7 +72,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	go calculateLoyaltySystem(orderNumber, hook.ServerConf)
+	go hook.calculateLoyaltySystem(orderNumber)
 
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))
@@ -82,38 +81,42 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	log.Println("Post handler")
 }
 
-func calculateLoyaltySystem(orderNumber string, s *config.MainConfig) {
-	link := fmt.Sprintf("%s/api/orders/%s", s.AccrualSystemAddress, orderNumber)
+func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
+	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
 	log.Info("calculateLoyaltySystem", link)
 
 	req, err := http.NewRequest(http.MethodGet, link, nil)
 	if err != nil {
 		return
 	}
+	for {
+		bytes, err := http.DefaultClient.Do(req)
+		if err != nil {
+			log.Errorf("error get data: %v", err)
+		}
 
-	bytes, err := http.DefaultClient.Do(req)
+		if bytes.StatusCode == http.StatusTooManyRequests {
+			time.Sleep(60 * time.Millisecond)
+		}
+		if bytes.StatusCode != http.StatusOK {
+			bytes.Body.Close()
+			continue
+		}
+		// ", bytes.Status, bytes.Header)
+		var order *model.DataOrder
+		//	b, err := io.ReadAll(bytes.Body)
+		//	log.Info("J_____", string(b))
 
-	if err != nil {
-		log.Errorf("error get data: %v", err)
+		if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
+			log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
+			continue
+		}
+		if _, err := hook.Storage.UpdateOrder(order); err != nil {
+			return
+		}
+		if order.Status == "PROCESSED" || order.Status == "INVALID" {
+			return
+		}
 	}
-	log.Info("Info req ", bytes.Status, bytes.Header)
-	var order *model.DataOrder
 
-	//	b, err := io.ReadAll(bytes.Body)
-	//	log.Info("J_____", string(b))
-	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
-		log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
-		return
-	}
-	defer bytes.Body.Close()
-
-	st, err := storage.NewPostgreSQLStorage(s.DatabaseURI)
-	if err != nil {
-		log.Error(err)
-
-	}
-	defer st.Close()
-	if _, err := st.UpdateOrder(order); err != nil {
-		return
-	}
 }
