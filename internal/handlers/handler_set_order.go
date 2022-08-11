@@ -97,8 +97,8 @@ func calculateLoyaltySystem(orderNumber string, s *config.MainConfig) {
 	}
 	var order *model.DataOrder
 
-	//b, err := io.ReadAll(bytes.Body)
-	//log.Info("J_____", string(b))
+	b, err := io.ReadAll(bytes.Body)
+	log.Info("J_____", string(b))
 	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
 		log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
 		return
