@@ -109,8 +109,10 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 
 		if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
 			log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
+			bytes.Body.Close()
 			continue
 		}
+		bytes.Body.Close()
 		if _, err := hook.Storage.UpdateOrder(order); err != nil {
 			return
 		}
