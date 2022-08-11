@@ -21,5 +21,5 @@ func (p *Plugin) updateOrderHandler(conn *postgresConn, key string, params []int
 		return "didn't update ", err
 	}
 
-	return nil, nil
+	return "", nil
 }
