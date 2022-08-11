@@ -114,7 +114,8 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 		}
 		bytes.Body.Close()
 		if _, err := hook.Storage.UpdateOrder(order); err != nil {
-			return
+			log.Errorf("calculateLoyaltySystem  -  DB : %v", err)
+			continue
 		}
 		if order.Status == "PROCESSED" || order.Status == "INVALID" {
 			return
