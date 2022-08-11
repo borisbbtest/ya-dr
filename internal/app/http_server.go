@@ -66,7 +66,16 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 
 	//Загрузка и получения номера заказа
 	serviceLogic.Post("/api/user/orders", hook.wrapp.PostOrderHandler)
-	serviceLogic.Get("/api/user/orders", hook.wrapp.GetJSONOrderHandler)
+	serviceLogic.Get("/api/user/orders", hook.wrapp.GetJSONOrdersHandler)
+
+	// проверка баланса
+	serviceLogic.Get("/api/user/balance", hook.wrapp.GetJSONOrdersHandler)
+
+	//запрос на списание средств
+	serviceLogic.Post("/api/user/balance/withdraw", hook.wrapp.GetJSONOrdersHandler)
+
+	//получения информации о выводе средств
+	serviceLogic.Post("/api/user/withdrawals", hook.wrapp.GetJSONOrdersHandler)
 
 	//веб форма
 	workDir, _ := os.Getwd()

@@ -3,6 +3,7 @@ package handlers
 import (
 	"compress/gzip"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -30,31 +31,74 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	bytes, err := ioutil.ReadAll(reader)
 	if err != nil {
 		log.Fatalln(err)
-	}
-	log.Info("PostJSONHandler")
-	defer r.Body.Close()
-
-	var m model.DataUser
-	if err := json.Unmarshal(bytes, &m); err != nil {
-		log.Errorf("body error: %v", string(bytes))
-		log.Errorf("error decoding message: %v", err)
-		http.Error(w, "request body is not valid json", 400)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Bad Request"))
 		return
 	}
 
-	// 200 — пользователь успешно аутентифицирован;
-	// 400 — неверный формат запроса;
-	// 401 — неверная пара логин/пароль;
-	// 500 — внутренняя ошибка сервера.
-	user, err := hook.Storage.GetUser(m)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
+	defer r.Body.Close()
+
+	orderNumber := string(bytes)
+
+	if !tools.IsValid(orderNumber) {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		w.Write([]byte("Неверный формат номера заказа;"))
+		return
 	}
-	if tools.Equal(&user, &m) {
-		w.WriteHeader(http.StatusOK)
-	} else {
-		w.WriteHeader(http.StatusUnauthorized)
+	currentPerson, err := tools.GetLogin(r, hook.Session)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Внутренняя ошибка сервера;"))
+		return
 	}
 
+	var order = model.DataOrder{
+		Number: orderNumber,
+		Status: model.StatusNew,
+		Person: currentPerson,
+	}
+
+	res, err := hook.Storage.PutOrder(order)
+	if res == currentPerson {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("номер заказа уже был загружен этим пользователем"))
+		return
+	}
+
+	if err == nil && res != currentPerson {
+		w.WriteHeader(http.StatusConflict)
+		w.Write([]byte("номер заказа уже был загружен другим пользователем"))
+		return
+	}
+
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte("новый номер заказа принят в обработку"))
+
+	//	go hook.calculateLoyaltySystem(orderNumber)
+
+	log.Print(res)
 	log.Println("Post handler")
+}
+
+func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
+	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
+	req, err := http.NewRequest(http.MethodGet, link, nil)
+	if err != nil {
+		return
+	}
+
+	bytes, err := http.DefaultClient.Do(req)
+	if err != nil {
+		log.Errorf("error get data: %v", err)
+	}
+
+	var order *model.DataOrder
+	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
+		log.Errorf("error decoding message: %v", err)
+		return
+	}
+
+	// if err := s.Orders().UpdateStatus(order); err != nil {
+	// 	return
+	// }
 }

@@ -27,7 +27,16 @@ func (hook *StoreDBinPostgreSQL) Close() {
 
 func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUser) (string, error) {
 	buff := []interface{}{v.Login, v.Password}
-	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.users", []string{}, hook.connStr, buff)
+	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.user", []string{}, hook.connStr, buff)
+	if err != nil {
+		return "", err
+	}
+	return res.(string), err
+}
+
+func (hook *StoreDBinPostgreSQL) PutOrder(v model.DataOrder) (string, error) {
+	buff := []interface{}{v.Number, v.Status, v.Person}
+	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.order", []string{}, hook.connStr, buff)
 	if err != nil {
 		return "", err
 	}
@@ -44,4 +53,15 @@ func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUser) (model.DataUser, erro
 	}
 
 	return res.(model.DataUser), nil
+}
+func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) {
+
+	buff := []interface{}{k}
+	res, err := hook.pgp.NewDBConn("pgsql.select.tb.orders", []string{}, hook.connStr, buff)
+	if err != nil {
+		log.Error("pgsql.select.tb.orders", err)
+		return nil, err
+	}
+
+	return res.([]model.DataOrder), nil
 }

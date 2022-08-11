@@ -11,6 +11,8 @@ type SessionHTTP struct {
 type Storage interface {
 	PutUser(v model.DataUser) (string, error)
 	GetUser(u model.DataUser) (model.DataUser, error)
+	PutOrder(v model.DataOrder) (string, error)
+	GetOrders(k string) ([]model.DataOrder, error)
 	Close()
 }
 

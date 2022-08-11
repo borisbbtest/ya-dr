@@ -9,7 +9,7 @@ const (
 	StatusProcessed  = "PROCESSED"
 )
 
-type DataOrders struct {
+type DataOrder struct {
 	Number     string    `json:"number"`
 	Status     string    `json:"status"`
 	Accrual    *int      `json:"accrual,omitempty"` //nullable

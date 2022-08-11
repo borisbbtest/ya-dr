@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	keyPostgresInsertUser = "pgsql.insert.tb.users"
+	keyPostgresInsertUser = "pgsql.insert.tb.user"
 )
 
 func (p *Plugin) insertUserHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
