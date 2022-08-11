@@ -62,7 +62,8 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 
 	serviceLogic := r.Group(nil)
 	serviceLogic.Use(hook.middle.MiddleSetSessionCookie)
-	serviceLogic.Use(midd.GzipHandle)
+	//serviceLogic.Use(midd.GzipHandle)
+	//serviceLogic.Use(middleware.Compress(5, "gzip"))
 
 	serviceLogic.Post("/api/user/orders", hook.wrapp.PostOrderHandler)
 	serviceLogic.Get("/api/user/orders", hook.wrapp.GetJSONOrdersHandler)
