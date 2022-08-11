@@ -82,6 +82,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 
 func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
+	log.Info("calculateLoyaltySystem", link)
 	req, err := http.NewRequest(http.MethodGet, link, nil)
 	if err != nil {
 		return
@@ -94,7 +95,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 	}
 	var order *model.DataOrder
 	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
-		log.Errorf("error decoding message: %v", err)
+		log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
 		return
 	}
 	defer bytes.Body.Close()
