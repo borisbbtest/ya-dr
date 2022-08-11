@@ -88,16 +88,16 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 	}
 
 	bytes, err := http.DefaultClient.Do(req)
+
 	if err != nil {
 		log.Errorf("error get data: %v", err)
 	}
-
 	var order *model.DataOrder
 	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
 		log.Errorf("error decoding message: %v", err)
 		return
 	}
-
+	defer bytes.Body.Close()
 	// if err := s.Orders().UpdateStatus(order); err != nil {
 	// 	return
 	// }
