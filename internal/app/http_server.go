@@ -38,7 +38,6 @@ func New(cfg *config.MainConfig) *serviceSystemLoyalty {
 }
 
 func (hook *serviceSystemLoyalty) Start() (err error) {
-
 	// Launch the listening thread
 	log.Println("Initializing HTTP server")
 	r := chi.NewRouter()
