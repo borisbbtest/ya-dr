@@ -8,7 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/borisbbtest/ya-dr/internal/config"
 	"github.com/borisbbtest/ya-dr/internal/model"
+	"github.com/borisbbtest/ya-dr/internal/storage"
 	"github.com/borisbbtest/ya-dr/internal/tools"
 )
 
@@ -74,14 +76,14 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))
 
-	go hook.calculateLoyaltySystem(orderNumber)
+	go calculateLoyaltySystem(orderNumber, hook.ServerConf)
 
 	log.Print(res)
 	log.Println("Post handler")
 }
 
-func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
-	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
+func calculateLoyaltySystem(orderNumber string, s *config.MainConfig) {
+	link := fmt.Sprintf("%s/api/orders/%s", s.AccrualSystemAddress, orderNumber)
 	log.Info("calculateLoyaltySystem", link)
 	req, err := http.NewRequest(http.MethodGet, link, nil)
 	if err != nil {
@@ -102,7 +104,14 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 		return
 	}
 	defer bytes.Body.Close()
-	if _, err := hook.Storage.UpdateOrder(order); err != nil {
+
+	st, err := storage.NewPostgreSQLStorage(s.DatabaseURI)
+	if err != nil {
+		log.Error(err)
+
+	}
+	defer st.Close()
+	if _, err := st.UpdateOrder(order); err != nil {
 		return
 	}
 }
