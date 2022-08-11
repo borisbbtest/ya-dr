@@ -42,13 +42,13 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 
 	if !tools.IsValid(orderNumber) {
 		w.WriteHeader(http.StatusUnprocessableEntity)
-		w.Write([]byte("Неверный формат номера заказа;"))
+		w.Write([]byte("order number has already been uploaded by this user"))
 		return
 	}
 	currentPerson, err := tools.GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Внутренняя ошибка сервера;"))
+		w.Write([]byte("Internal Server Error;"))
 		return
 	}
 
@@ -61,18 +61,18 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	res, err := hook.Storage.PutOrder(order)
 	if res == currentPerson {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("номер заказа уже был загружен этим пользователем"))
+		w.Write([]byte("order number has already been uploaded by this user"))
 		return
 	}
 
 	if err == nil && res != currentPerson {
 		w.WriteHeader(http.StatusConflict)
-		w.Write([]byte("номер заказа уже был загружен другим пользователем"))
+		w.Write([]byte("the order number has already been uploaded by another user"))
 		return
 	}
 
 	w.WriteHeader(http.StatusAccepted)
-	w.Write([]byte("новый номер заказа принят в обработку"))
+	w.Write([]byte("new order number accepted for processing"))
 
 	//	go hook.calculateLoyaltySystem(orderNumber)
 

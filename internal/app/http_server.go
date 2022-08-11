@@ -25,7 +25,7 @@ type serviceSystemLoyalty struct {
 }
 
 func New(cfg *config.MainConfig) *serviceSystemLoyalty {
-	var sessionHTTP *storage.SessionHTTP = &storage.SessionHTTP{DBSession: map[string]model.DataUser{}}
+	sessionHTTP := &storage.SessionHTTP{DBSession: map[string]model.DataUser{}}
 	return &serviceSystemLoyalty{
 		wrapp: handlers.WrapperHandler{
 			ServerConf: cfg,
@@ -64,20 +64,15 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 	serviceLogic.Use(hook.middle.MiddleSetSessionCookie)
 	serviceLogic.Use(midd.GzipHandle)
 
-	//Загрузка и получения номера заказа
 	serviceLogic.Post("/api/user/orders", hook.wrapp.PostOrderHandler)
 	serviceLogic.Get("/api/user/orders", hook.wrapp.GetJSONOrdersHandler)
 
-	// проверка баланса
 	serviceLogic.Get("/api/user/balance", hook.wrapp.GetJSONOrdersHandler)
 
-	//запрос на списание средств
 	serviceLogic.Post("/api/user/balance/withdraw", hook.wrapp.GetJSONOrdersHandler)
 
-	//получения информации о выводе средств
 	serviceLogic.Post("/api/user/withdrawals", hook.wrapp.GetJSONOrdersHandler)
 
-	//веб форма
 	workDir, _ := os.Getwd()
 	filesDir := http.Dir(filepath.Join(workDir, "web"))
 	hook.wrapp.FileServer(r, "/form", filesDir)

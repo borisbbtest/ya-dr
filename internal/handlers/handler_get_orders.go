@@ -12,7 +12,7 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 	currentPerson, err := tools.GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte("Внутренняя ошибка сервера;"))
+		w.Write([]byte("Internal Error"))
 		return
 	}
 
@@ -22,13 +22,15 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		return
 	}
 	if len(arrOrders) < 0 {
-		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		w.Header().Set("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Content-Type", "application/json")
 	log.Info(arrOrders)
-	json.NewEncoder(w).Encode(arrOrders)
-
+	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
+		log.Info(err)
+		return
+	}
 	log.Println("Post handler")
 }
