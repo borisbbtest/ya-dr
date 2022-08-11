@@ -94,6 +94,8 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 		log.Errorf("error get data: %v", err)
 	}
 	var order *model.DataOrder
+	log.Info("J_____", bytes.Body)
+
 	if err := json.NewDecoder(bytes.Body).Decode(&order); err != nil {
 		log.Errorf("calculateLoyaltySystem  -  error decoding message: %v", err)
 		return
