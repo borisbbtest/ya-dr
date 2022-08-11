@@ -10,7 +10,7 @@ import (
 
 func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Add("Content-Type", "application/json")
 
 	currentPerson, err := tools.GetLogin(r, hook.Session)
 	if err != nil {
