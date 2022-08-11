@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"sort"
 
 	"github.com/borisbbtest/ya-dr/internal/tools"
 )
@@ -23,10 +24,14 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	if len(arrOrders) == 0 {
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
+	// if len(arrOrders) == 0 {
+	// 	w.WriteHeader(http.StatusNoContent)
+	// 	return
+	// }
+
+	sort.Slice(arrOrders, func(i, j int) bool {
+		return arrOrders[i].UploadedAt.Before(arrOrders[j].UploadedAt)
+	})
 
 	log.Info(arrOrders)
 	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
