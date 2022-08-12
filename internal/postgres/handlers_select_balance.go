@@ -26,7 +26,7 @@ func (p *Plugin) selectBalanceHandler(conn *postgresConn, key string, params []i
 func (p *Plugin) selectWithdrawCountHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var buff int
-	query := `SELECT count("Accrual") from "Orders" where "Person" = $1 AND "Sum" < 0;`
+	query := `SELECT count("Accrual") from "Orders" where "Person" = $1 AND "Accrual" < 0;`
 
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
