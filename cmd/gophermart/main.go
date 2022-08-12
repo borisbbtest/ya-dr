@@ -10,6 +10,7 @@ import (
 
 var log = logrus.WithField("context", "main")
 
+// готово
 func main() {
 	logrus.SetOutput(os.Stdout)
 	logrus.SetLevel(logrus.DebugLevel)
