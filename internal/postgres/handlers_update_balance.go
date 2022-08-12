@@ -13,8 +13,8 @@ func (p *Plugin) updateBalanceHandler(conn *postgresConn, key string, params []i
 	var err error
 	query := ` 	UPDATE  public."Balance"
 				SET
-					"CurrentAccrual"="CurrentAccrual" + $2 ,
-					"Withdrawn" = "Withdrawn"+ $3
+					CurrentAccrual=CurrentAccrual + $2 ,
+					Withdrawn = Withdrawn + $3
 				WHERE "Person" = $1;
 			`
 
