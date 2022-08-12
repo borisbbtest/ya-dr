@@ -76,7 +76,6 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 	}
 
 	m.Person = currentPerson
-	m.Sum = m.Sum * -1
 	if _, err := hook.Storage.PutWithdraw(m); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
