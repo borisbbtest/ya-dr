@@ -14,7 +14,7 @@ func (p *Plugin) updateBalanceHandler(conn *postgresConn, key string, params []i
 	query := ` 	UPDATE  public."Balance"
 				SET
 					"CurrentAccrual"="CurrentAccrual" + $2 ,
-					"Withdrawn" = $3
+					"Withdrawn" = "Withdrawn"+ $3
 				WHERE "Person" = $1;
 			`
 

@@ -76,8 +76,14 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 	}
 
 	m.Person = currentPerson
+	withdrawn := m.Sum
+	currentaccrual := m.Sum * -1
 	if _, err := hook.Storage.PutWithdraw(m); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
+	hook.Storage.UpdateBalance(&model.DataBalance{
+		Withdrawn:      &withdrawn,
+		CurrentAccrual: &currentaccrual,
+	})
 	w.WriteHeader(http.StatusOK)
 }
