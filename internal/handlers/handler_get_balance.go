@@ -7,11 +7,6 @@ import (
 	"github.com/borisbbtest/ya-dr/internal/tools"
 )
 
-type responseJSON struct {
-	Current   float32 `json:"current"`
-	Withdrawn int     `json:"withdrawn"`
-}
-
 func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "application/json")
@@ -23,36 +18,16 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	balanceAccrual, err := hook.Storage.GetBalanceAccrual(currentPerson)
+	balanceAccrual, err := hook.Storage.GetBalance(currentPerson)
 	if err != nil {
 		// w.WriteHeader(http.StatusInternalServerError)
 		// return
 		log.Error("GetJSONBalanceHandler - ", err)
 	}
 
-	balanceWallet, err := hook.Storage.GetBalanceWallet(currentPerson)
-	if err != nil {
-		// w.WriteHeader(http.StatusInternalServerError)
-		// return
-		log.Error("GetJSONBalanceHandler - ", err)
-	}
+	log.Info("----", balanceAccrual.CurrentAccrual, "----", balanceAccrual.Withdrawn)
 
-	sumBalance := balanceAccrual - balanceWallet
-
-	withdrawn, err := hook.Storage.GetWithdrawCount(currentPerson)
-	if err != nil {
-		log.Error("GetJSONBalanceHandler - ", err)
-		//w.WriteHeader(http.StatusInternalServerError)
-		//return
-	}
-
-	log.Info(balanceAccrual, "----", balanceWallet, "----", withdrawn)
-	response := &responseJSON{
-		Current:   sumBalance,
-		Withdrawn: withdrawn,
-	}
-
-	if err := json.NewEncoder(w).Encode(response); err != nil {
+	if err := json.NewEncoder(w).Encode(balanceAccrual); err != nil {
 		log.Info(err)
 		return
 	}

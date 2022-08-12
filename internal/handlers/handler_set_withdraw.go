@@ -60,7 +60,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	balance, err := hook.Storage.GetBalanceAccrual(currentPerson)
+	balance, err := hook.Storage.GetBalance(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -70,7 +70,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	if balance < m.Sum {
+	if *balance.CurrentAccrual < m.Sum {
 		w.WriteHeader(http.StatusPaymentRequired)
 		return
 	}
