@@ -60,7 +60,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	balance, err := hook.Storage.GetBalance(currentPerson)
+	balance, err := hook.Storage.GetBalanceAccrual(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

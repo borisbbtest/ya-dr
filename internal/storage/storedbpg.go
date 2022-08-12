@@ -76,12 +76,24 @@ func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) 
 	return res.([]model.DataOrder), nil
 }
 
-func (hook *StoreDBinPostgreSQL) GetBalance(v string) (float32, error) {
+func (hook *StoreDBinPostgreSQL) GetBalanceAccrual(v string) (float32, error) {
 
 	buff := []interface{}{v}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.balance", []string{}, hook.connStr, buff)
 	if err != nil {
 		log.Error("pgsql.select.tb.balance", err)
+		return 0, err
+	}
+
+	return res.(float32), nil
+}
+
+func (hook *StoreDBinPostgreSQL) GetBalanceWallet(v string) (float32, error) {
+
+	buff := []interface{}{v}
+	res, err := hook.pgp.NewDBConn("pgsql.select.tb.sum.withdraw.count", []string{}, hook.connStr, buff)
+	if err != nil {
+		log.Error("pgsql.select.tb.sum.withdraw.count", err)
 		return 0, err
 	}
 

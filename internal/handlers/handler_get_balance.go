@@ -23,19 +23,25 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	balance, err := hook.Storage.GetBalance(currentPerson)
+	balanceAccrual, err := hook.Storage.GetBalanceAccrual(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
+	balanceWalle, err := hook.Storage.GetBalanceWallet(currentPerson)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	sumBalance := balanceAccrual - balanceWalle
 	withdrawn, err := hook.Storage.GetWithdrawCount(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	response := &responseJSON{
-		Current:   balance,
+		Current:   sumBalance,
 		Withdrawn: withdrawn,
 	}
 

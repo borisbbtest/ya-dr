@@ -89,6 +89,8 @@ func (p *Plugin) NewDBConn(key string, params []string, dsnString string, handle
 		handler = p.selectWithdrawalsHandler
 	case keyPostgresSelectWithdrawCount:
 		handler = p.selectWithdrawCountHandler
+	case keyPostgresSelectSumWithdrawCount:
+		handler = p.selectSumWithdrawHandler
 	default:
 		return nil, errorUnsupportedQuery
 	}
