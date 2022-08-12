@@ -30,7 +30,7 @@ func (p *Plugin) selectWithdrawCountHandler(conn *postgresConn, key string, para
 	buff := model.DataUser{}
 	query := `SELECT count("Sum") from "Wallet" where "Person" = $1 AND "Sum" < 0;`
 
-	err := conn.postgresPool.QueryRow(context.Background(), query, params[0]).Scan(&buff.Login, &buff.Password)
+	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
 		log.Error("selectWithdrawCountHandler", err)
 		return 0, err
