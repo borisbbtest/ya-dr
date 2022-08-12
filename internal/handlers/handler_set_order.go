@@ -56,7 +56,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		Person: currentPerson,
 	}
 
-	log.Info(order)
+	log.Info("PostOrderHandler -->", order)
 	res, err := hook.Storage.PutOrder(order)
 	if res == currentPerson {
 		w.WriteHeader(http.StatusOK)
