@@ -19,7 +19,7 @@ func (p *Plugin) updateBalanceHandler(conn *postgresConn, key string, params []i
 			`
 
 	if _, err = conn.postgresPool.Exec(context.Background(), query, params...); err != nil {
-		log.Error("updateOrderBalance ", err)
+		log.Error("updateBalanceHandler ", err)
 		return "didn't update ", err
 	}
 
