@@ -33,7 +33,7 @@ func (hook *WrapperHandler) GetJSONWithdrawalsHandler(w http.ResponseWriter, r *
 		return withdrawals[i].ProcessedAt.Before(withdrawals[j].ProcessedAt)
 	})
 
-	log.Info(withdrawals)
+	log.Info("GetJSONWithdrawalsHandler", withdrawals)
 	if err := json.NewEncoder(w).Encode(withdrawals); err != nil {
 		log.Info(err)
 		return

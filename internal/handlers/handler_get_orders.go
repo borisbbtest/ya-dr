@@ -33,7 +33,7 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		return arrOrders[i].UploadedAt.Before(arrOrders[j].UploadedAt)
 	})
 
-	log.Info(arrOrders)
+	log.Info("PostOrderHandler  ", arrOrders)
 	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
 		log.Info(err)
 		return
