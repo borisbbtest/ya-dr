@@ -44,7 +44,7 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 	}
 	response := &responseJSON{
 		Current:   sumBalance,
-		Withdrawn: withdrawn,
+		Withdrawn: 4,
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
