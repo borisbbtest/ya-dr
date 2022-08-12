@@ -9,7 +9,7 @@ import (
 
 type responseJSON struct {
 	Current   float32 `json:"current"`
-	Withdrawn int     `json:"withdrawn"`
+	Withdrawn float32 `json:"withdrawn"`
 }
 
 func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http.Request) {
@@ -44,11 +44,10 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		//w.WriteHeader(http.StatusInternalServerError)
 		//return
 	}
-	withdrawn = 5
 	log.Info(balanceAccrual, "----", balanceWallet, "----", withdrawn)
 	response := &responseJSON{
-		Current:   sumBalance,
-		Withdrawn: withdrawn,
+		Current:   balanceAccrual,
+		Withdrawn: sumBalance,
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
