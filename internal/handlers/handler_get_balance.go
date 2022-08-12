@@ -36,6 +36,7 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		// return
 		log.Error("GetJSONBalanceHandler - ", err)
 	}
+	log.Info(balanceAccrual, "----", balanceWallet)
 	sumBalance := balanceAccrual - balanceWallet
 	withdrawn, err := hook.Storage.GetWithdrawCount(currentPerson)
 	if err != nil {
