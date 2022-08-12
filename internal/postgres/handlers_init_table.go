@@ -50,6 +50,19 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 
 					COMMENT ON TABLE public."Wallet"  IS 'This table was created for storage data about Wallet';
 
+					CREATE TABLE IF NOT EXISTS public."Balance"
+					(
+						"Person"           "text",
+						"Withdrawn"        "numeric",
+						"CurrentAccrual"   "numeric",
+					    CONSTRAINT "Person" PRIMARY KEY ("Person")
+					)
+					TABLESPACE pg_default;
+
+					ALTER TABLE IF EXISTS public."Balance" 	OWNER to postgres;
+
+					COMMENT ON TABLE public."Balance"  IS 'This table was created for storage data about Balance';
+
 			`
 
 	if _, err := conn.postgresPool.Exec(context.Background(), query); err != nil {
