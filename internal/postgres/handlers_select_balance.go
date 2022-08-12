@@ -2,8 +2,6 @@ package postgres
 
 import (
 	"context"
-
-	"github.com/borisbbtest/ya-dr/internal/model"
 )
 
 const (
@@ -27,7 +25,7 @@ func (p *Plugin) selectBalanceHandler(conn *postgresConn, key string, params []i
 
 func (p *Plugin) selectWithdrawCountHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
-	buff := model.DataUser{}
+	var buff int
 	query := `SELECT count("Sum") from "Wallet" where "Person" = $1 AND "Sum" < 0;`
 
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
