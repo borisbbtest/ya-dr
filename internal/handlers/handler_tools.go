@@ -51,10 +51,13 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUs
 			continue
 		}
 		if order.Status == "PROCESSED" || order.Status == "INVALID" {
+			var p float32
+			p = 0.0
 			if *order.Accrual > 0 {
 				hook.Storage.UpdateBalance(&model.DataBalance{
 					Person:         currentUser,
 					CurrentAccrual: order.Accrual,
+					Withdrawn:      &p,
 				})
 			}
 			//hook.Storage.PutWithdraw(model.Wallet{Person: currentUser, Order: orderNumber, Sum: *order.Accrual})
