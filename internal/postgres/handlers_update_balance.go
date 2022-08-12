@@ -8,7 +8,7 @@ const (
 	keyPostgresUpdateBalance = "pgsql.update.tb.balance"
 )
 
-func (p *Plugin) updateOrderBalance(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
+func (p *Plugin) updateBalanceHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var err error
 	query := ` 	UPDATE  public."Balance"

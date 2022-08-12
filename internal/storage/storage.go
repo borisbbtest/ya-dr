@@ -21,6 +21,7 @@ type Storage interface {
 
 	PutWithdraw(v model.Wallet) (string, error)
 	GetWithdrawals(k string) ([]model.Wallet, error)
+	UpdateBalance(v *model.DataBalance) (string, error)
 
 	Close()
 }
