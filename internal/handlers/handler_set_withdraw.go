@@ -80,4 +80,5 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 	if _, err := hook.Storage.PutWithdraw(m); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
+	w.WriteHeader(http.StatusOK)
 }
