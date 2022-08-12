@@ -59,6 +59,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		Person: currentPerson,
 	}
 
+	log.Info(order)
 	res, err := hook.Storage.PutOrder(order)
 	if res == currentPerson {
 		w.WriteHeader(http.StatusOK)
@@ -115,6 +116,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 		log.Info(order)
 		order.Number = orderNumber
 		bytes.Body.Close()
+		log.Info(order)
 		if _, err := hook.Storage.UpdateOrder(order); err != nil {
 			log.Errorf("calculateLoyaltySystem  -  DB : %v", err)
 			continue
