@@ -16,8 +16,6 @@ type Storage interface {
 	GetOrders(k string) ([]model.DataOrder, error)
 
 	GetBalance(v string) (model.DataBalance, error)
-	GetBalanceWallet(v string) (float32, error)
-	GetWithdrawCount(v string) (int, error)
 
 	PutWithdraw(v model.Wallet) (string, error)
 	GetWithdrawals(k string) ([]model.Wallet, error)
