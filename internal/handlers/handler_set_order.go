@@ -73,7 +73,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	go hook.calculateLoyaltySystem(orderNumber)
+	go hook.calculateLoyaltySystem(orderNumber, currentPerson)
 
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))
@@ -82,7 +82,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 	log.Println("Post handler")
 }
 
-func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
+func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUser string) {
 	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
 	log.Info("calculateLoyaltySystem", link)
 
@@ -113,7 +113,9 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 			bytes.Body.Close()
 			continue
 		}
+
 		log.Info(" --- ", order, " --- ", *order.Accrual)
+
 		order.Number = orderNumber
 		bytes.Body.Close()
 		log.Info(order)
@@ -122,6 +124,8 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 			continue
 		}
 		if order.Status == "PROCESSED" || order.Status == "INVALID" {
+
+			hook.Storage.PutWithdraw(model.Wallet{Person: currentUser, Order: orderNumber, Sum: *order.Accrual})
 			return
 		}
 	}
