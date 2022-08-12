@@ -113,7 +113,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string) {
 			bytes.Body.Close()
 			continue
 		}
-		log.Info(" --- ", order, " --- ", order.Accrual)
+		log.Info(" --- ", order, " --- ", *order.Accrual)
 		order.Number = orderNumber
 		bytes.Body.Close()
 		log.Info(order)
