@@ -25,11 +25,11 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		log.Error("GetJSONBalanceHandler - ", err)
 	}
 
-	if balanceAccrual.Withdrawn == nil {
-		*balanceAccrual.Withdrawn = 0
-	}
+	// if balanceAccrual.Withdrawn == nil {
+	// 	*balanceAccrual.Withdrawn = 0
+	// }
 
-	log.Info("----", *balanceAccrual.CurrentAccrual, "----", *balanceAccrual.Withdrawn)
+	log.Info("----", *balanceAccrual.CurrentAccrual, "----", balanceAccrual.Withdrawn)
 
 	if err := json.NewEncoder(w).Encode(balanceAccrual); err != nil {
 		log.Info(err)
