@@ -18,7 +18,7 @@ func (p *Plugin) selectBalanceHandler(conn *postgresConn, key string, params []i
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
 		log.Error("Error selectBalanceHandler", err)
-		return 0, nil
+		return 0, err
 	}
 
 	return buff, nil
@@ -32,7 +32,7 @@ func (p *Plugin) selectSumWithdrawHandler(conn *postgresConn, key string, params
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
 		log.Error("Error selectSumWithdrawHandler", err)
-		return 0, nil
+		return 0, err
 	}
 
 	return buff, nil
