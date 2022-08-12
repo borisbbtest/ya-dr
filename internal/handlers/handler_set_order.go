@@ -125,7 +125,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUs
 		}
 		if order.Status == "PROCESSED" || order.Status == "INVALID" {
 
-			hook.Storage.PutWithdraw(model.Wallet{Person: currentUser, Order: orderNumber, Sum: *order.Accrual})
+			//hook.Storage.PutWithdraw(model.Wallet{Person: currentUser, Order: orderNumber, Sum: *order.Accrual})
 			return
 		}
 	}
