@@ -36,13 +36,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		w.Write([]byte("Bad Request"))
 		return
 	}
-	orderNumber := string(bytes)
 
-	if !tools.IsValid(orderNumber) {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		w.Write([]byte("order number has already been uploaded by this user"))
-		return
-	}
 	defer r.Body.Close()
 
 	var m model.Wallet
@@ -50,6 +44,12 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		log.Errorf("body error: %v", string(bytes))
 		log.Errorf("error decoding message: %v", err)
 		http.Error(w, "request body is not valid json", 400)
+		return
+	}
+
+	if !tools.IsValid(m.Order) {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		w.Write([]byte("order number has already been uploaded by this user"))
 		return
 	}
 
