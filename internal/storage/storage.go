@@ -14,6 +14,13 @@ type Storage interface {
 	PutOrder(v model.DataOrder) (string, error)
 	UpdateOrder(v *model.DataOrder) (string, error)
 	GetOrders(k string) ([]model.DataOrder, error)
+
+	GetBalance(v string) (float32, error)
+	GetWithdrawCount(v string) (int, error)
+
+	PutWithdraw(v model.Wallet) (string, error)
+	GetWithdrawals(k string) ([]model.Wallet, error)
+
 	Close()
 }
 

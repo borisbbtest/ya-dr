@@ -22,7 +22,6 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 
 					COMMENT ON TABLE public."Users"  IS 'This table was created for storage data about persons users in within inside project';
 
-
 					CREATE TABLE IF NOT EXISTS public."Orders"
 					(
 						"Number" "text" NOT NULL,
@@ -37,6 +36,19 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 					ALTER TABLE IF EXISTS public."Orders" 	OWNER to postgres;
 
 					COMMENT ON TABLE public."Orders"  IS 'This table was created for storage data about orders';
+
+					CREATE TABLE IF NOT EXISTS public."Wallet"
+					(
+						"Order" "text" NOT NULL,
+						"Person" "text" NOT NULL,
+						"Sum" "numeric",
+						"Uploaded_at" "timestamptz" NOT NULL
+					)
+					TABLESPACE pg_default;
+
+					ALTER TABLE IF EXISTS public."Wallet" 	OWNER to postgres;
+
+					COMMENT ON TABLE public."Wallet"  IS 'This table was created for storage data about Wallet';
 
 			`
 

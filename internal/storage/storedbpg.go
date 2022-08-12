@@ -63,6 +63,7 @@ func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUser) (model.DataUser, erro
 
 	return res.(model.DataUser), nil
 }
+
 func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) {
 
 	buff := []interface{}{k}
@@ -73,4 +74,49 @@ func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) 
 	}
 
 	return res.([]model.DataOrder), nil
+}
+
+func (hook *StoreDBinPostgreSQL) GetBalance(v string) (float32, error) {
+
+	buff := []interface{}{v}
+	res, err := hook.pgp.NewDBConn("pgsql.select.tb.balance", []string{}, hook.connStr, buff)
+	if err != nil {
+		log.Error("pgsql.select.tb.balance", err)
+		return 0, err
+	}
+
+	return res.(float32), nil
+}
+
+func (hook *StoreDBinPostgreSQL) GetWithdrawCount(v string) (int, error) {
+
+	buff := []interface{}{v}
+	res, err := hook.pgp.NewDBConn("pgsql.select.tb.withdraw.count", []string{}, hook.connStr, buff)
+	if err != nil {
+		log.Error("pgsql.select.tb.withdraw.count", err)
+		return 0, err
+	}
+
+	return res.(int), nil
+}
+
+func (hook *StoreDBinPostgreSQL) PutWithdraw(v model.Wallet) (string, error) {
+	buff := []interface{}{v.Order, v.Person, v.Sum}
+	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.withdraw", []string{}, hook.connStr, buff)
+	if err != nil {
+		return "", err
+	}
+	return res.(string), err
+}
+
+func (hook *StoreDBinPostgreSQL) GetWithdrawals(k string) ([]model.Wallet, error) {
+
+	buff := []interface{}{k}
+	res, err := hook.pgp.NewDBConn("pgsql.select.tb.withdrawals", []string{}, hook.connStr, buff)
+	if err != nil {
+		log.Error("pgsql.select.tb.withdrawals", err)
+		return nil, err
+	}
+
+	return res.([]model.Wallet), nil
 }

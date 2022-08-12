@@ -67,11 +67,11 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 	serviceLogic.Post("/api/user/orders", hook.wrapp.PostOrderHandler)
 	serviceLogic.Get("/api/user/orders", hook.wrapp.GetJSONOrdersHandler)
 
-	serviceLogic.Get("/api/user/balance", hook.wrapp.GetJSONOrdersHandler)
+	serviceLogic.Get("/api/user/balance", hook.wrapp.GetJSONBalanceHandler)
 
-	serviceLogic.Post("/api/user/balance/withdraw", hook.wrapp.GetJSONOrdersHandler)
+	serviceLogic.Post("/api/user/withdraw", hook.wrapp.GetJSONWithdrawHandler)
 
-	serviceLogic.Post("/api/user/withdrawals", hook.wrapp.GetJSONOrdersHandler)
+	serviceLogic.Get("/api/user/withdrawals", hook.wrapp.GetJSONWithdrawalsHandler)
 
 	workDir, _ := os.Getwd()
 	filesDir := http.Dir(filepath.Join(workDir, "web"))
