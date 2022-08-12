@@ -13,7 +13,7 @@ const (
 func (p *Plugin) selectBalanceHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var buff float32
-	query := `SELECT sum("Accrual") from "Orders" where "Person" = $1 ;`
+	query := `SELECT "CurrentAccrual" from "Balance" where "Person" = $1 ;`
 
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
