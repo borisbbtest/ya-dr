@@ -69,7 +69,7 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 
 	serviceLogic.Get("/api/user/balance", hook.wrapp.GetJSONBalanceHandler)
 
-	serviceLogic.Post("/api/user/withdraw", hook.wrapp.GetJSONWithdrawHandler)
+	serviceLogic.Post("/api/user/balance/withdraw", hook.wrapp.GetJSONWithdrawHandler)
 
 	serviceLogic.Get("/api/user/withdrawals", hook.wrapp.GetJSONWithdrawalsHandler)
 
