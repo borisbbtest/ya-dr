@@ -41,7 +41,7 @@ func (p *Plugin) selectSumWithdrawHandler(conn *postgresConn, key string, params
 func (p *Plugin) selectWithdrawCountHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var buff int
-	query := `SELECT count("Sum") from "Wallet" where "Person" = $1 AND "Sum" < 0;`
+	query := `SELECT count("Sum") from "Wallet" where "Person" = $1;`
 
 	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff)
 	if err != nil {
