@@ -12,9 +12,10 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 	query := `
 				    CREATE TABLE IF NOT EXISTS public."Users"
 					(
-						"Login" "text",
+						"Id" "serial",
+						"Login" "text" UNIQUE NOT NULL,
 						"Password" "text" NOT NULL,
-						CONSTRAINT "Login" PRIMARY KEY ("Login")
+						CONSTRAINT "Id" PRIMARY KEY ("Id")
 					)
 					TABLESPACE pg_default;
 
