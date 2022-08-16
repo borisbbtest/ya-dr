@@ -2,12 +2,10 @@ package config
 
 import (
 	goflag "flag"
-	"io/ioutil"
 
 	"github.com/caarlos0/env"
 	"github.com/sirupsen/logrus"
 	flag "github.com/spf13/pflag"
-	"gopkg.in/yaml.v2"
 )
 
 type MainConfig struct {
@@ -23,36 +21,17 @@ func GetConfig() (config *MainConfig, err error) {
 	config = &MainConfig{}
 
 	var log = logrus.WithField("context", "system_loyalty")
-	var configFileName string
-	flag.StringVarP(&configFileName, "config", "c", "./config.yml", "path to the configuration file")
+	flag.StringVarP(&config.AccrualSystemAddress, "accrual_system_adders", "r", config.AccrualSystemAddress, "Accrual system address")
+	flag.StringVarP(&config.DatabaseURI, "database_uri", "d", config.DatabaseURI, "Base URL")
+	flag.StringVarP(&config.RunAddress, "run_server", "a", config.RunAddress, "Run server")
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 	flag.Parse()
-
-	log.Infof("Loading configuration at '%s'", configFileName)
-
-	configFile, err := ioutil.ReadFile(configFileName)
-	if err != nil {
-		log.Errorf("can't open the config file: %s", err)
-		return
-	}
-	// Default values
-	err = yaml.Unmarshal(configFile, &config)
-	if err != nil {
-		log.Errorf("can't read the config file: %s", err)
-		return
-	}
 
 	err = env.Parse(config)
 	if err != nil {
 		log.Errorf("can't start the listening thread: %s", err)
 		return
 	}
-
-	flag.StringVarP(&config.AccrualSystemAddress, "accrual_system_adders", "r", config.AccrualSystemAddress, "Accrual system address")
-	flag.StringVarP(&config.DatabaseURI, "database_uri", "d", config.DatabaseURI, "Base URL")
-	flag.StringVarP(&config.RunAddress, "run_server", "a", config.RunAddress, "Run server")
-	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
-	flag.Parse()
 
 	//***postgres:5432/praktikum?sslmode=disable
 	log.Info("Configuration loaded")
