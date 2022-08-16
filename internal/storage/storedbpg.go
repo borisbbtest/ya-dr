@@ -37,7 +37,7 @@ func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUser) (string, error) {
 }
 
 func (hook *StoreDBinPostgreSQL) PutOrder(v model.DataOrder) (int, error) {
-	buff := []interface{}{v.Number, v.Status, v.Person}
+	buff := []interface{}{v.Number, v.Status, *v.Person}
 	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.order", []string{}, hook.connStr, buff)
 	if err != nil {
 		return -1, err
