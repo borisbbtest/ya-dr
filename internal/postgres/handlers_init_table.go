@@ -66,7 +66,7 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 
 			`
 
-	if _, err := conn.postgresPool.Exec(context.Background(), query); err != nil {
+	if _, err := conn.PostgresPool.Exec(context.Background(), query); err != nil {
 		return "Table didn't create ", err
 	}
 	return "Table created ", nil

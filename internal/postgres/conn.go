@@ -17,7 +17,7 @@ var log = logrus.WithField("context", "system_loyalty")
 // postgresConn holds pointer to the Pool of Postgres Instance
 type postgresConn struct {
 	sync.Mutex
-	postgresPool   *pgxpool.Pool
+	PostgresPool   *pgxpool.Pool
 	lastTimeAccess time.Time
 	version        int
 	connString     string
@@ -58,7 +58,7 @@ func (p *Plugin) NewConnManager(keepAlive, timeout time.Duration) *connManager {
 func (p *postgresConn) finalize() (err error) {
 	p.Lock()
 	defer p.Unlock()
-	if p.postgresPool != nil {
+	if p.PostgresPool != nil {
 		return
 	}
 
@@ -101,16 +101,16 @@ func (p *postgresConn) finalize() (err error) {
 	}
 
 	p.version = version
-	p.postgresPool = newConn
+	p.PostgresPool = newConn
 	return
 }
 
 func (p *postgresConn) close() {
 	p.Lock()
 	defer p.Unlock()
-	if p.postgresPool != nil {
-		p.postgresPool.Close()
-		p.postgresPool = nil
+	if p.PostgresPool != nil {
+		p.PostgresPool.Close()
+		p.PostgresPool = nil
 	}
 }
 

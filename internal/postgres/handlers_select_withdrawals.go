@@ -16,7 +16,7 @@ func (p *Plugin) selectWithdrawalsHandler(conn *postgresConn, key string, params
 	orders := []model.Wallet{}
 	query := `SELECT "Order", "Sum", "Uploaded_at" FROM "Wallet" WHERE "Person" = $1 ORDER BY  "Uploaded_at";`
 
-	rows, err := conn.postgresPool.Query(context.Background(), query, params...)
+	rows, err := conn.PostgresPool.Query(context.Background(), query, params...)
 
 	for rows.Next() {
 		m := model.Wallet{}

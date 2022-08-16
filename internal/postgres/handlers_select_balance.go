@@ -15,7 +15,7 @@ func (p *Plugin) selectBalanceHandler(conn *postgresConn, key string, params []i
 	var buff model.DataBalance
 	query := `SELECT "CurrentAccrual", "Withdrawn"  from "Balance" where "Person" = $1 ;`
 
-	err := conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&buff.CurrentAccrual, &buff.Withdrawn)
+	err := conn.PostgresPool.QueryRow(context.Background(), query, params...).Scan(&buff.CurrentAccrual, &buff.Withdrawn)
 	if err != nil {
 		log.Error("Error selectBalanceHandler", err)
 		return 0, err

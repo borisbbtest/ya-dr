@@ -12,7 +12,7 @@ func (p *Plugin) insertWithdrawHandler(conn *postgresConn, key string, params []
 
 	query := `INSERT INTO "Wallet" ("Order","Person", "Sum" , "Uploaded_at") VALUES ($1, $2, $3, NOW());`
 
-	if _, err := conn.postgresPool.Exec(context.Background(), query, params...); err != nil {
+	if _, err := conn.PostgresPool.Exec(context.Background(), query, params...); err != nil {
 		log.Info("insertWithdrawHandler --- ", err)
 		return "insertWithdrawHandler ", err
 	}

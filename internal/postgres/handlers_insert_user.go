@@ -25,7 +25,7 @@ func (p *Plugin) insertUserHandler(conn *postgresConn, key string, params []inte
 	UNION ALL
     SELECT "Login"  FROM  "Users"  WHERE  "Login"  = $1;`
 
-	err = conn.postgresPool.QueryRow(context.Background(), query, params...).Scan(&users)
+	err = conn.PostgresPool.QueryRow(context.Background(), query, params...).Scan(&users)
 
 	if err != nil {
 		log.Info("insertUserHandler  --  ", err)

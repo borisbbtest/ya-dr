@@ -13,7 +13,7 @@ func (p *Plugin) insertBalanceHandler(conn *postgresConn, key string, params []i
 	query := `INSERT INTO "Balance" ("Person", "Withdrawn" , "CurrentAccrual" )
 			  SELECT "Id", 0 ,0  From "Users" WHERE  "Login"  = $1 ;`
 
-	if _, err := conn.postgresPool.Exec(context.Background(), query, params[0]); err != nil {
+	if _, err := conn.PostgresPool.Exec(context.Background(), query, params[0]); err != nil {
 		log.Info("insertBalanceHandler --- ", err)
 		return "insertBalanceHandler ", err
 	}

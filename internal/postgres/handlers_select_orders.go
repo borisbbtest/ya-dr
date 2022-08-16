@@ -16,7 +16,7 @@ func (p *Plugin) selectOrdersHandler(conn *postgresConn, key string, params []in
 	orders := []model.DataOrder{}
 	query := `SELECT "Number","Status" ,"Person", "Accrual", "Uploaded_at"   FROM  "Orders"  WHERE  "Person"  = $1 ORDER BY "Uploaded_at";`
 
-	rows, err := conn.postgresPool.Query(context.Background(), query, params...)
+	rows, err := conn.PostgresPool.Query(context.Background(), query, params...)
 
 	for rows.Next() {
 		m := model.DataOrder{}
