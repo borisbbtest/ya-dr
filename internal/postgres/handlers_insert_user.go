@@ -18,7 +18,7 @@ func (p *Plugin) insertUserHandler(conn *postgresConn, key string, params []inte
 		"Login", "Password" )
 		VALUES ($1, $2)
 		ON CONFLICT ("Login") DO NOTHING
-		RETURNING "Login"
+		RETURNING "ID"
 	)
 	SELECT NULL AS result
 	WHERE EXISTS (SELECT 1 FROM cte)
