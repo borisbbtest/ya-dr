@@ -13,6 +13,6 @@ type DataOrder struct {
 	Number     string    `json:"number"`
 	Status     string    `json:"status"`
 	Accrual    *float32  `json:"accrual,omitempty"` //nullable
-	Person     string    `json:"-"`
+	Person     *int      `json:"-"`
 	UploadedAt time.Time `json:"uploaded_at"`
 }

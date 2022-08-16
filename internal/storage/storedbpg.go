@@ -36,13 +36,13 @@ func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUser) (string, error) {
 	return res.(string), err
 }
 
-func (hook *StoreDBinPostgreSQL) PutOrder(v model.DataOrder) (string, error) {
+func (hook *StoreDBinPostgreSQL) PutOrder(v model.DataOrder) (int, error) {
 	buff := []interface{}{v.Number, v.Status, v.Person}
 	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.order", []string{}, hook.connStr, buff)
 	if err != nil {
-		return "", err
+		return -1, err
 	}
-	return res.(string), err
+	return res.(int), err
 }
 
 func (hook *StoreDBinPostgreSQL) UpdateOrder(v *model.DataOrder) (string, error) {
@@ -75,7 +75,7 @@ func (hook *StoreDBinPostgreSQL) GetUser(k model.DataUser) (model.DataUser, erro
 	return res.(model.DataUser), nil
 }
 
-func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) {
+func (hook *StoreDBinPostgreSQL) GetOrders(k int) ([]model.DataOrder, error) {
 
 	buff := []interface{}{k}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.orders", []string{}, hook.connStr, buff)
@@ -87,7 +87,7 @@ func (hook *StoreDBinPostgreSQL) GetOrders(k string) ([]model.DataOrder, error) 
 	return res.([]model.DataOrder), nil
 }
 
-func (hook *StoreDBinPostgreSQL) GetBalance(v string) (model.DataBalance, error) {
+func (hook *StoreDBinPostgreSQL) GetBalance(v int) (model.DataBalance, error) {
 
 	buff := []interface{}{v}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.balance", []string{}, hook.connStr, buff)
@@ -108,7 +108,7 @@ func (hook *StoreDBinPostgreSQL) PutWithdraw(v model.Wallet) (string, error) {
 	return res.(string), err
 }
 
-func (hook *StoreDBinPostgreSQL) GetWithdrawals(k string) ([]model.Wallet, error) {
+func (hook *StoreDBinPostgreSQL) GetWithdrawals(k int) ([]model.Wallet, error) {
 
 	buff := []interface{}{k}
 	res, err := hook.pgp.NewDBConn("pgsql.select.tb.withdrawals", []string{}, hook.connStr, buff)

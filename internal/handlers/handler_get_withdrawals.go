@@ -19,7 +19,7 @@ func (hook *WrapperHandler) GetJSONWithdrawalsHandler(w http.ResponseWriter, r *
 		return
 	}
 
-	withdrawals, err := hook.Storage.GetWithdrawals(currentPerson)
+	withdrawals, err := hook.Storage.GetWithdrawals(*currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

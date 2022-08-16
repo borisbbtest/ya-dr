@@ -58,19 +58,19 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 
 	log.Info("PostOrderHandler -->", order)
 	res, err := hook.Storage.PutOrder(order)
-	if res == currentPerson {
+	if res == *currentPerson {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("order number has already been uploaded by this user"))
 		return
 	}
 
-	if err == nil && res != currentPerson {
+	if err == nil && res != *currentPerson {
 		w.WriteHeader(http.StatusConflict)
 		w.Write([]byte("the order number has already been uploaded by another user"))
 		return
 	}
 
-	go hook.calculateLoyaltySystem(orderNumber, currentPerson)
+	go hook.calculateLoyaltySystem(orderNumber, *currentPerson)
 
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("new order number accepted for processing"))

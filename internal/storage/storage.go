@@ -11,14 +11,14 @@ type SessionHTTP struct {
 type Storage interface {
 	PutUser(v model.DataUser) (string, error)
 	GetUser(u model.DataUser) (model.DataUser, error)
-	PutOrder(v model.DataOrder) (string, error)
+	PutOrder(v model.DataOrder) (int, error)
 	UpdateOrder(v *model.DataOrder) (string, error)
-	GetOrders(k string) ([]model.DataOrder, error)
+	GetOrders(k int) ([]model.DataOrder, error)
 
-	GetBalance(v string) (model.DataBalance, error)
+	GetBalance(v int) (model.DataBalance, error)
 
 	PutWithdraw(v model.Wallet) (string, error)
-	GetWithdrawals(k string) ([]model.Wallet, error)
+	GetWithdrawals(k int) ([]model.Wallet, error)
 	UpdateBalance(v *model.DataBalance) (string, error)
 
 	Close()

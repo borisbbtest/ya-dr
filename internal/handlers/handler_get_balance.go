@@ -18,7 +18,7 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	balanceAccrual, err := hook.Storage.GetBalance(currentPerson)
+	balanceAccrual, err := hook.Storage.GetBalance(*currentPerson)
 	if err != nil {
 		// w.WriteHeader(http.StatusInternalServerError)
 		// return

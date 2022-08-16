@@ -9,7 +9,7 @@ import (
 	"github.com/borisbbtest/ya-dr/internal/model"
 )
 
-func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUser string) {
+func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUser int) {
 	link := fmt.Sprintf("%s/api/orders/%s", hook.ServerConf.AccrualSystemAddress, orderNumber)
 	log.Info("calculateLoyaltySystem", link)
 
@@ -54,7 +54,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUs
 			if *order.Accrual > 0 {
 				x := float32(0)
 				hook.Storage.UpdateBalance(&model.DataBalance{
-					Person:         currentUser,
+					Person:         &currentUser,
 					CurrentAccrual: order.Accrual,
 					Withdrawn:      &x,
 				})
