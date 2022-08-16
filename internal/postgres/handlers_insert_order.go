@@ -11,7 +11,7 @@ const (
 func (p *Plugin) insertOrderHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var err error
-	var person string
+	var person int
 	query := `
 	WITH cte AS (
 		INSERT INTO public."Orders" ("Number","Status", "Person","Uploaded_at")
