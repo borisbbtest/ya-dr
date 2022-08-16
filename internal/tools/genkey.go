@@ -10,6 +10,7 @@ import (
 
 	"github.com/itchyny/base58-go"
 	uuid "github.com/nu7hatch/gouuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func sha256Of(input string) []byte {
@@ -26,6 +27,16 @@ func base58Encoded(bytes []byte) string {
 		os.Exit(1)
 	}
 	return string(encoded)
+}
+
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func GenerateKeyGen(initialLink string) string {

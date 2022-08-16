@@ -31,6 +31,13 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	// 400 — неверный формат запроса;
 	// 409 — логин уже занят;
 	// 500 — внутренняя ошибка сервера.
+	m.Password, err = tools.HashPassword(m.Password)
+	if err != nil {
+		log.Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error;"))
+		return
+	}
 	user, err := hook.Storage.PutUser(m)
 	if err != nil {
 		log.Error(err)
