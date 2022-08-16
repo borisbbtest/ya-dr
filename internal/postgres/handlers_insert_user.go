@@ -11,7 +11,7 @@ const (
 func (p *Plugin) insertUserHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
 	var err error
-	var users string
+	var users int
 	query := `
 	WITH cte AS (
 		INSERT INTO public."Users"(
