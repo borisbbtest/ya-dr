@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/borisbbtest/ya-dr/internal/config"
@@ -63,6 +64,7 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 			return
 		}
 		user.SessionExpiredAt = time
+		user.LocalMutex = &sync.Mutex{}
 		hook.Session.DBSession[str] = user
 		w.WriteHeader(http.StatusOK)
 		return

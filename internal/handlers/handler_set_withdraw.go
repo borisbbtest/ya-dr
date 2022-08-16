@@ -44,6 +44,13 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
+	currentMutex, err := GetMutex(r, hook.Session)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error;"))
+		return
+	}
+	currentMutex.Lock()
 	balance, err := hook.Storage.GetBalance(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -73,5 +80,6 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 	}); err != nil {
 		log.Info("GetJSONWithdrawHandler", err)
 	}
+	currentMutex.Unlock()
 	w.WriteHeader(http.StatusOK)
 }

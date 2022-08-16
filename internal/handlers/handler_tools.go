@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/borisbbtest/ya-dr/internal/model"
@@ -55,11 +56,14 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUs
 		if order.Status == "PROCESSED" || order.Status == "INVALID" {
 			if *order.Accrual > 0 {
 				x := float32(0)
-				hook.Storage.UpdateBalance(&model.DataBalance{
+				_, err = hook.Storage.UpdateBalance(&model.DataBalance{
 					Person:         currentUser,
 					CurrentAccrual: order.Accrual,
 					Withdrawn:      &x,
 				})
+				if err != nil {
+					log.Error(err)
+				}
 			}
 			//hook.Storage.PutWithdraw(model.Wallet{Person: currentUser, Order: orderNumber, Sum: *order.Accrual})
 			return
@@ -107,4 +111,15 @@ func GetLogin(r *http.Request, session *storage.SessionHTTP) (int, error) {
 		return session.DBSession[cookie.Value].ID, nil
 	}
 	return -1, ErrUnauthorized
+}
+
+func GetMutex(r *http.Request, session *storage.SessionHTTP) (*sync.Mutex, error) {
+	if IsUserAuthed(r, session) {
+		cookie, err := r.Cookie(AuthCookieKey)
+		if err != nil {
+			log.Error(err)
+		}
+		return session.DBSession[cookie.Value].LocalMutex, nil
+	}
+	return nil, ErrUnauthorized
 }
