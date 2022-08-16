@@ -41,10 +41,10 @@ func IsUserAuthed(r *http.Request, session *storage.SessionHTTP) bool {
 	return true
 }
 
-func GetLogin(r *http.Request, session *storage.SessionHTTP) (*int, error) {
+func GetLogin(r *http.Request, session *storage.SessionHTTP) (int, error) {
 	if IsUserAuthed(r, session) {
 		cookie, _ := r.Cookie(AuthCookieKey)
 		return session.DBSession[cookie.Value].ID, nil
 	}
-	return nil, ErrUnauthorized
+	return -1, ErrUnauthorized
 }

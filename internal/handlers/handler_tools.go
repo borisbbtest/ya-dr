@@ -54,7 +54,7 @@ func (hook *WrapperHandler) calculateLoyaltySystem(orderNumber string, currentUs
 			if *order.Accrual > 0 {
 				x := float32(0)
 				hook.Storage.UpdateBalance(&model.DataBalance{
-					Person:         &currentUser,
+					Person:         currentUser,
 					CurrentAccrual: order.Accrual,
 					Withdrawn:      &x,
 				})

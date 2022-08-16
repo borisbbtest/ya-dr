@@ -19,7 +19,7 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	arrOrders, err := hook.Storage.GetOrders(*currentPerson)
+	arrOrders, err := hook.Storage.GetOrders(currentPerson)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

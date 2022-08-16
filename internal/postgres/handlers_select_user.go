@@ -15,7 +15,7 @@ func (p *Plugin) selectUserHandler(conn *postgresConn, key string, params []inte
 	buff := model.DataUser{}
 	query := `SELECT "Id", "Login",  "Password"  FROM  "Users"  WHERE  "Login"  = $1;`
 
-	err := conn.postgresPool.QueryRow(context.Background(), query, params[0]).Scan(buff.ID, &buff.Login, &buff.Password)
+	err := conn.postgresPool.QueryRow(context.Background(), query, params[0]).Scan(&buff.ID, &buff.Login, &buff.Password)
 	if err != nil {
 		log.Error("selectUserHandler", err)
 		return nil, err
