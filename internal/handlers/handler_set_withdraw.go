@@ -37,7 +37,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	currentPerson, err := tools.GetLogin(r, hook.Session)
+	currentPerson, err := GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Internal Server Error;"))

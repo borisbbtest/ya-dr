@@ -55,7 +55,7 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 			log.Error(err)
 		}
 		str := fmt.Sprintf("%x", tmp)
-		time, err := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		time, err := AddCookie(w, r, AuthCookieKey, str, 30*time.Minute)
 		if err != nil {
 			log.Error(err)
 		}

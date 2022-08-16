@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/borisbbtest/ya-dr/internal/handlers"
 	"github.com/borisbbtest/ya-dr/internal/storage"
-	"github.com/borisbbtest/ya-dr/internal/tools"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,7 +16,7 @@ type WrapperMiddleware struct {
 
 func (hook *WrapperMiddleware) MiddleSetSessionCookie(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if tools.IsUserAuthed(r, hook.Session) {
+		if handlers.IsUserAuthed(r, hook.Session) {
 			next.ServeHTTP(w, r)
 			return
 		}

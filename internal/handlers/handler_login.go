@@ -55,7 +55,7 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 			log.Error(err)
 		}
 		str := fmt.Sprintf("%x", tmp)
-		time, err := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		time, err := AddCookie(w, r, AuthCookieKey, str, 30*time.Minute)
 		if err != nil {
 			log.Error("Didn't set cooke", err)
 			w.WriteHeader(http.StatusInternalServerError)

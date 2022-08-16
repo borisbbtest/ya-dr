@@ -27,7 +27,7 @@ func (hook *WrapperHandler) PostOrderHandler(w http.ResponseWriter, r *http.Requ
 		w.Write([]byte("order number has already been uploaded by this user"))
 		return
 	}
-	currentPerson, err := tools.GetLogin(r, hook.Session)
+	currentPerson, err := GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Internal Server Error;"))

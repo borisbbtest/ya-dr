@@ -3,15 +3,13 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-
-	"github.com/borisbbtest/ya-dr/internal/tools"
 )
 
 func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "application/json")
 
-	currentPerson, err := tools.GetLogin(r, hook.Session)
+	currentPerson, err := GetLogin(r, hook.Session)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Internal Server Error;"))
