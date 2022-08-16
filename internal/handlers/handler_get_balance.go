@@ -17,7 +17,7 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 		w.Write([]byte("Internal Server Error;"))
 		return
 	}
-
+	log.Info(currentPerson)
 	balanceAccrual, err := hook.Storage.GetBalance(currentPerson)
 	if err != nil {
 		// w.WriteHeader(http.StatusInternalServerError)
