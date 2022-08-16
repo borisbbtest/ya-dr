@@ -1,15 +1,32 @@
 package storage
 
-import "github.com/borisbbtest/ya-dr/internal/model"
+import (
+	"context"
+
+	"github.com/borisbbtest/ya-dr/internal/model"
+)
 
 func (hook *StoreDBinPostgreSQL) GetOrders(k int) ([]model.DataOrder, error) {
 
-	buff := []interface{}{k}
-	res, err := hook.pgp.NewDBConn("pgsql.select.tb.orders", []string{}, hook.connStr, buff)
+	var err error
+	orders := []model.DataOrder{}
+	query := `SELECT "Number","Status" ,"Person", "Accrual", "Uploaded_at"   FROM  "Orders"  WHERE  "Person"  = $1 ORDER BY "Uploaded_at";`
+	conn, err := hook.pgp.NewConn()
+	rows, err := conn.PostgresPool.Query(context.Background(), query, k)
+
+	for rows.Next() {
+		m := model.DataOrder{}
+		err = rows.Scan(&m.Number, &m.Status, &m.Person, &m.Accrual, &m.UploadedAt)
+		if err != nil {
+			log.Info("selectOrdersHandler - c: ", err)
+			return nil, err
+		}
+		orders = append(orders, m)
+	}
 	if err != nil {
-		log.Error("pgsql.select.tb.orders", err)
+		log.Info("selectOrdersHandler  --  ", err)
 		return nil, err
 	}
 
-	return res.([]model.DataOrder), nil
+	return orders, nil
 }
