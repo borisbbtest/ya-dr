@@ -1,15 +1,36 @@
 package storage
 
-import "github.com/borisbbtest/ya-dr/internal/model"
+import (
+	"context"
+
+	"github.com/borisbbtest/ya-dr/internal/model"
+)
 
 func (hook *StoreDBinPostgreSQL) GetWithdrawals(k int) ([]model.Wallet, error) {
+	var err error
+	orders := []model.Wallet{}
+	query := `SELECT "Order", "Sum", "Uploaded_at" FROM "Wallet" WHERE "Person" = $1 ORDER BY  "Uploaded_at";`
 
-	buff := []interface{}{k}
-	res, err := hook.pgp.NewDBConn("pgsql.select.tb.withdrawals", []string{}, hook.connStr, buff)
+	conn, err := hook.pgp.NewConn()
 	if err != nil {
-		log.Error("pgsql.select.tb.withdrawals", err)
+		log.Error("selectOrdersHandler - c: ", err)
+		return nil, err
+	}
+	rows, err := conn.PostgresPool.Query(context.Background(), query, k)
+
+	for rows.Next() {
+		m := model.Wallet{}
+		err = rows.Scan(&m.Order, &m.Sum, &m.ProcessedAt)
+		if err != nil {
+			log.Info("selectOrdersHandler - c: ", err)
+			return nil, err
+		}
+		orders = append(orders, m)
+	}
+	if err != nil {
+		log.Info("selectOrdersHandler  --  ", err)
 		return nil, err
 	}
 
-	return res.([]model.Wallet), nil
+	return orders, nil
 }

@@ -93,8 +93,6 @@ func (p *Plugin) NewDBConn(key string, params []string, dsnString string, handle
 		handler = p.updateOrderHandler
 	case keyPostgresInsertWithdraw:
 		handler = p.insertWithdrawHandler
-	case keyPostgresSelectWithdrawals:
-		handler = p.selectWithdrawalsHandler
 	case keyPostgresInsertBalance:
 		handler = p.insertBalanceHandler
 	case keyPostgresUpdateBalance:
