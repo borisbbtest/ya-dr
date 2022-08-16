@@ -52,11 +52,12 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	if user != "" {
 		w.WriteHeader(http.StatusConflict)
 	} else {
+		u, _ := hook.Storage.GetUser(m)
 		tmp, _ := tools.GetID()
 		str := fmt.Sprintf("%x", tmp)
 		time, _ := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
-		m.SessionExpiredAt = time
-		hook.Session.DBSession[str] = m
+		u.SessionExpiredAt = time
+		hook.Session.DBSession[str] = u
 		w.WriteHeader(http.StatusOK)
 	}
 
