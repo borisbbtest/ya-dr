@@ -12,6 +12,10 @@ func (hook *StoreDBinPostgreSQL) GetOrders(k int) ([]model.DataOrder, error) {
 	orders := []model.DataOrder{}
 	query := `SELECT "Number","Status" ,"Person", "Accrual", "Uploaded_at"   FROM  "Orders"  WHERE  "Person"  = $1 ORDER BY "Uploaded_at";`
 	conn, err := hook.pgp.NewConn()
+	if err != nil {
+		log.Error("selectOrdersHandler - c: ", err)
+		return nil, err
+	}
 	rows, err := conn.PostgresPool.Query(context.Background(), query, k)
 
 	for rows.Next() {
