@@ -27,7 +27,7 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 					(
 						"Number" "text" NOT NULL,
 						"Status" "text" NOT NULL,
-						"Person" "text" NOT NULL,
+						"Person" "numeric" NOT NULL,
 						"Accrual" "numeric",
 						"Uploaded_at" "timestamptz" NOT NULL,
 						CONSTRAINT "Number" PRIMARY KEY ("Number")
@@ -41,7 +41,7 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 					CREATE TABLE IF NOT EXISTS public."Wallet"
 					(
 						"Order" "text" NOT NULL,
-						"Person" "text" NOT NULL,
+						"Person" "numeric" NOT NULL,
 						"Sum" "numeric",
 						"Uploaded_at" "timestamptz" NOT NULL
 					)
@@ -53,7 +53,7 @@ func (p *Plugin) CreateTableLoyaltySystemHandler(conn *postgresConn, key string,
 
 					CREATE TABLE IF NOT EXISTS public."Balance"
 					(
-						"Person"           "text",
+						"Person"           "numeric",
 						"Withdrawn"        "numeric",
 						"CurrentAccrual"   "numeric",
 					    CONSTRAINT "Person" PRIMARY KEY ("Person")
