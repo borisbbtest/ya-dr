@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"sort"
 )
 
 func (hook *WrapperHandler) GetJSONWithdrawalsHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,9 +26,9 @@ func (hook *WrapperHandler) GetJSONWithdrawalsHandler(w http.ResponseWriter, r *
 		return
 	}
 
-	sort.Slice(withdrawals, func(i, j int) bool {
-		return withdrawals[i].ProcessedAt.Before(withdrawals[j].ProcessedAt)
-	})
+	// sort.Slice(withdrawals, func(i, j int) bool {
+	// 	return withdrawals[i].ProcessedAt.Before(withdrawals[j].ProcessedAt)
+	// })
 
 	log.Info("GetJSONWithdrawalsHandler", withdrawals)
 	if err := json.NewEncoder(w).Encode(withdrawals); err != nil {

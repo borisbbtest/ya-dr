@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
-	"sort"
 )
 
 func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,9 +26,9 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	sort.Slice(arrOrders, func(i, j int) bool {
-		return arrOrders[i].UploadedAt.Before(arrOrders[j].UploadedAt)
-	})
+	// sort.Slice(arrOrders, func(i, j int) bool {
+	// 	return arrOrders[i].UploadedAt.Before(arrOrders[j].UploadedAt)
+	// })
 
 	log.Info("PostOrderHandler  ", arrOrders)
 	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
