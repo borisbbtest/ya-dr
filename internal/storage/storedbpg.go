@@ -29,7 +29,7 @@ func (hook *StoreDBinPostgreSQL) PutUser(v model.DataUser) (string, error) {
 	buff := []interface{}{v.Login, v.Password}
 	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.user", []string{}, hook.connStr, buff)
 	if err != nil {
-		hook.pgp.NewDBConn("pgsql.insert.tb.balance", []string{}, hook.connStr, buff)
+		hook.pgp.NewDBConn("pgsql.insert.tb.balance", []string{}, hook.connStr, []interface{}{v.ID})
 		return "", err
 	}
 
