@@ -33,16 +33,19 @@ func GetConfig() (config *MainConfig, err error) {
 	configFile, err := ioutil.ReadFile(configFileName)
 	if err != nil {
 		log.Errorf("can't open the config file: %s", err)
+		return
 	}
 	// Default values
 	err = yaml.Unmarshal(configFile, &config)
 	if err != nil {
 		log.Errorf("can't read the config file: %s", err)
+		return
 	}
 
 	err = env.Parse(config)
 	if err != nil {
 		log.Errorf("can't start the listening thread: %s", err)
+		return
 	}
 
 	flag.StringVarP(&config.AccrualSystemAddress, "accrual_system_adders", "r", config.AccrualSystemAddress, "Accrual system address")
