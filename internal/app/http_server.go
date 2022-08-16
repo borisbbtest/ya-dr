@@ -73,7 +73,10 @@ func (hook *serviceSystemLoyalty) Start() (err error) {
 
 	serviceLogic.Get("/api/user/withdrawals", hook.wrapp.GetJSONWithdrawalsHandler)
 
-	workDir, _ := os.Getwd()
+	workDir, err := os.Getwd()
+	if err != nil {
+		log.Error(err)
+	}
 	filesDir := http.Dir(filepath.Join(workDir, "web"))
 	hook.wrapp.FileServer(r, "/form", filesDir)
 

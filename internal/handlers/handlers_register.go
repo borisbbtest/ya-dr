@@ -31,14 +31,27 @@ func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *ht
 	// 400 — неверный формат запроса;
 	// 409 — логин уже занят;
 	// 500 — внутренняя ошибка сервера.
-	user, _ := hook.Storage.PutUser(m)
+	user, err := hook.Storage.PutUser(m)
+	if err != nil {
+		log.Error(err)
+	}
 	if user != "" {
 		w.WriteHeader(http.StatusConflict)
+		return
 	} else {
-		u, _ := hook.Storage.GetUser(m)
-		tmp, _ := tools.GetID()
+		u, err := hook.Storage.GetUser(m)
+		if err != nil {
+			log.Error(err)
+		}
+		tmp, err := tools.GetID()
+		if err != nil {
+			log.Error(err)
+		}
 		str := fmt.Sprintf("%x", tmp)
-		time, _ := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		time, err := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		if err != nil {
+			log.Error(err)
+		}
 		u.SessionExpiredAt = time
 		hook.Session.DBSession[str] = u
 		w.WriteHeader(http.StatusOK)
