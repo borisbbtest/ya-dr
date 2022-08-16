@@ -26,15 +26,16 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 
 	bytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatalln(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Server Error;"))
+		return
 	}
 	log.Info("PostJSONHandler")
 	defer r.Body.Close()
 
 	var m model.DataUser
 	if err := json.Unmarshal(bytes, &m); err != nil {
-		log.Errorf("body error: %v", string(bytes))
-		log.Errorf("error decoding message: %v", err)
+		log.Errorf("body error: %v \n error decoding message: %v", string(bytes), err)
 		http.Error(w, "request body is not valid json", 400)
 		return
 	}
@@ -50,7 +51,13 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 	if tools.Equal(&user, &m) {
 		tmp, _ := tools.GetID()
 		str := fmt.Sprintf("%x", tmp)
-		time, _ := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		time, err := tools.AddCookie(w, r, tools.AuthCookieKey, str, 30*time.Minute)
+		if err != nil {
+			log.Error("Didn't set cooke", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte("Internal Server Error;"))
+			return
+		}
 		user.SessionExpiredAt = time
 		hook.Session.DBSession[str] = user
 		w.WriteHeader(http.StatusOK)
