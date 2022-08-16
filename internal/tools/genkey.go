@@ -5,11 +5,9 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
-	"math/big"
 	"os"
 
 	"github.com/itchyny/base58-go"
-	uuid "github.com/nu7hatch/gouuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -37,17 +35,6 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
-}
-
-func GenerateKeyGen(initialLink string) string {
-	u, err := uuid.NewV4()
-	if err != nil {
-		panic(err)
-	}
-	urlHashBytes := sha256Of(initialLink + u.String())
-	generatedNumber := new(big.Int).SetBytes(urlHashBytes).Uint64()
-	finalString := base58Encoded([]byte(fmt.Sprintf("%d", generatedNumber)))
-	return finalString[:8]
 }
 
 func GenerateRandom(size int) ([]byte, error) {
