@@ -87,8 +87,6 @@ func (p *Plugin) NewDBConn(key string, params []string, dsnString string, handle
 		handler = p.CreateTableLoyaltySystemHandler
 	case keyPostgresUpdateOrder:
 		handler = p.updateOrderHandler
-	case keyPostgresInsertWithdraw:
-		handler = p.insertWithdrawHandler
 	case keyPostgresUpdateBalance:
 		handler = p.updateBalanceHandler
 	default:
