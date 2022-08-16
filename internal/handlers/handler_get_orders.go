@@ -32,6 +32,8 @@ func (hook *WrapperHandler) GetJSONOrdersHandler(w http.ResponseWriter, r *http.
 
 	log.Info("PostOrderHandler  ", arrOrders)
 	if err := json.NewEncoder(w).Encode(arrOrders); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Error"))
 		log.Info(err)
 		return
 	}

@@ -30,6 +30,8 @@ func (hook *WrapperHandler) GetJSONBalanceHandler(w http.ResponseWriter, r *http
 	log.Info("----", *balanceAccrual.CurrentAccrual, "----", balanceAccrual.Withdrawn)
 
 	if err := json.NewEncoder(w).Encode(balanceAccrual); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Error"))
 		log.Info(err)
 		return
 	}
