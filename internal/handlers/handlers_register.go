@@ -1,10 +1,8 @@
 package handlers
 
 import (
-	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -14,22 +12,7 @@ import (
 )
 
 func (hook *WrapperHandler) PostJSONRegisterHandler(w http.ResponseWriter, r *http.Request) {
-
-	var reader io.Reader
-
-	if r.Header.Get(`Content-Encoding`) == `gzip` {
-		gz, err := gzip.NewReader(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		reader = gz
-		defer gz.Close()
-	} else {
-		reader = r.Body
-	}
-
-	bytes, err := ioutil.ReadAll(reader)
+	bytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"compress/gzip"
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"net/http"
 
@@ -15,21 +13,7 @@ func (hook *WrapperHandler) GetJSONWithdrawHandler(w http.ResponseWriter, r *htt
 
 	w.Header().Add("Content-Type", "application/json")
 
-	var reader io.Reader
-
-	if r.Header.Get(`Content-Encoding`) == `gzip` {
-		gz, err := gzip.NewReader(r.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		reader = gz
-		defer gz.Close()
-	} else {
-		reader = r.Body
-	}
-
-	bytes, err := ioutil.ReadAll(reader)
+	bytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatalln(err)
 		w.WriteHeader(http.StatusBadRequest)
