@@ -85,16 +85,12 @@ func (p *Plugin) NewDBConn(key string, params []string, dsnString string, handle
 		handler = p.pingHandler // postgres.ping[[connString]]
 	case keyPostgresCreateDdLoyaltySystem:
 		handler = p.CreateTableLoyaltySystemHandler
-	case keyPostgresInsertUser:
-		handler = p.insertUserHandler
 	case keyPostgresInsertOrder:
 		handler = p.insertOrderHandler
 	case keyPostgresUpdateOrder:
 		handler = p.updateOrderHandler
 	case keyPostgresInsertWithdraw:
 		handler = p.insertWithdrawHandler
-	case keyPostgresInsertBalance:
-		handler = p.insertBalanceHandler
 	case keyPostgresUpdateBalance:
 		handler = p.updateBalanceHandler
 	default:
