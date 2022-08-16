@@ -6,5 +6,5 @@ type DataUser struct {
 	Login            string    `json:"login"`
 	Password         string    `json:"password"`
 	SessionExpiredAt time.Time `json:"-"`
-	Id               *int      `json:"-"`
+	ID               *int      `json:"-"`
 }
