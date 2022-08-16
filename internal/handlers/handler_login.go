@@ -47,6 +47,7 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 	user, err := hook.Storage.GetUser(m)
 	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
+		return
 	}
 	if tools.Equal(&user, &m) {
 		tmp, _ := tools.GetID()
@@ -61,9 +62,8 @@ func (hook *WrapperHandler) PostJSONLoginHandler(w http.ResponseWriter, r *http.
 		user.SessionExpiredAt = time
 		hook.Session.DBSession[str] = user
 		w.WriteHeader(http.StatusOK)
-	} else {
-		w.WriteHeader(http.StatusUnauthorized)
+		return
 	}
-
+	w.WriteHeader(http.StatusUnauthorized)
 	log.Println("Post handler")
 }
