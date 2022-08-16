@@ -10,7 +10,8 @@ const (
 
 func (p *Plugin) insertBalanceHandler(conn *postgresConn, key string, params []interface{}) (interface{}, error) {
 
-	query := `INSERT INTO "Balance" ("Person", "Withdrawn" , "CurrentAccrual" ) VALUES ($1,0, 0);`
+	query := `INSERT INTO "Balance" ("Person", "Withdrawn" , "CurrentAccrual" ) 
+							SELECT "Id", 0 ,0   WHERE  "Login"  = $1 ;`
 
 	if _, err := conn.postgresPool.Exec(context.Background(), query, params[0]); err != nil {
 		log.Info("insertBalanceHandler --- ", err)
