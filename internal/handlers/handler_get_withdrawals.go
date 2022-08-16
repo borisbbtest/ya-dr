@@ -32,6 +32,8 @@ func (hook *WrapperHandler) GetJSONWithdrawalsHandler(w http.ResponseWriter, r *
 
 	log.Info("GetJSONWithdrawalsHandler", withdrawals)
 	if err := json.NewEncoder(w).Encode(withdrawals); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("Internal Error"))
 		log.Info(err)
 		return
 	}
