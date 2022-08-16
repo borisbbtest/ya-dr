@@ -1,12 +1,24 @@
 package storage
 
-import "github.com/borisbbtest/ya-dr/internal/model"
+import (
+	"context"
+
+	"github.com/borisbbtest/ya-dr/internal/model"
+)
 
 func (hook *StoreDBinPostgreSQL) PutWithdraw(v model.Wallet) (string, error) {
-	buff := []interface{}{v.Order, v.Person, v.Sum}
-	res, err := hook.pgp.NewDBConn("pgsql.insert.tb.withdraw", []string{}, hook.connStr, buff)
+
+	query := `INSERT INTO "Wallet" ("Order","Person", "Sum" , "Uploaded_at") VALUES ($1, $2, $3, NOW());`
+	conn, err := hook.pgp.NewConn()
 	if err != nil {
+		log.Error("selectOrdersHandler - c: ", err)
 		return "", err
 	}
-	return res.(string), err
+
+	if _, err := conn.PostgresPool.Exec(context.Background(), query, v.Order, v.Person, v.Sum); err != nil {
+		log.Info("insertWithdrawHandler --- ", err)
+		return "insertWithdrawHandler ", err
+	}
+
+	return "", nil
 }
